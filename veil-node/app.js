@@ -26,10 +26,10 @@ const apnProvider = new apn.Provider({
 // MYSQL DatabaseConnection
 const db = mysql.createConnection({
     host: "localhost",
-    user: "veil",
-    password: "cc4dec7f-26e7-4311-bbf4-47c47bf3acfa",
-    database: "veil",
-    charset: 'utf8mb4'
+    user: "root",
+    password: "",
+    database: "veil_live",
+    charset: 'utf8'
 });
 
 // Connect to Database
