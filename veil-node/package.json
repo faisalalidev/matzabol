@@ -1,0 +1,21 @@
+{
+  "name": "chatapp",
+  "version": "1.0.0",
+  "description": "App for chatting",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Asad Haider",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "express": "^4.8.8",
+    "mysql": "^2.15.0",
+    "nodemon": "^1.10.0",
+    "socket.io": "^1.1.0",
+    "validator": "^5.4.0",
+    "apn": "^2.2.0"
+  }
+}

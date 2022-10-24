@@ -1,0 +1,542 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Blueprint of all the restful web-services of Education USA Application.",
+    "version": "1.0.1",
+    "title": "Web services For Education USA Project",
+    "contact": {
+      "email": "test@test.com"
+    },
+    "license": {
+      "name": " BT"
+    }
+  },
+  "host": "educationusa.stagingic.com",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "User",
+      "description": "User or Account Operations"
+    },
+    {
+      "name": "Event",
+      "description": "Event Operations"
+    },
+    {
+      "name": "Education Guideline",
+      "description": "Education Guidline"
+    },
+    {
+      "name": "FAQ",
+      "description": "Faq"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "This service will return user data if successful. User object will also include auth key which will be used for all other actions.",
+        "description": "  ",
+        "operationId": "user registration",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "description": "user name",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "unique email address",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "password",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "password_confirmation",
+            "in": "formData",
+            "description": "value should same as password",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "device_type",
+            "in": "formData",
+            "description": "'ios' or 'android' should be send",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "device_token",
+            "in": "formData",
+            "description": "device token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "This login service will response user with its details.User details carry a token that use as a bearer auth token.",
+        "description": "  ",
+        "operationId": "user login",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "user email",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "password",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "device_type",
+            "in": "formData",
+            "description": "device type android/Iphone",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "device_token",
+            "in": "formData",
+            "description": "device unique id",
+            "required": true,
+            "type": "string",
+            "default": null
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/user/get-profile": {
+      "get": {
+        "security":{
+          "basicAuth": []
+        },
+        "tags": [
+          "User"
+        ],
+        "summary": "This service will get contents for user profile details",
+        "description": "  ",
+        "operationId": "User",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "user id",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "device_token",
+            "in": "query",
+            "description": "Unique device token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "The auth_key in user object must be send in 'Authorization' bearer token.",
+            "required": true,
+            "type": "string",
+            "default": null
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/user/update-profile": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Update user profile data",
+        "description": "Create a new user.",
+        "operationId": "User Update Profile",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "formData",
+            "description": "User name of the user",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "in": "formData",
+            "description": "Mobile number of the user",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "country",
+            "in": "formData",
+            "description": "Country",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "dob",
+            "in": "formData",
+            "description": "Date of birth",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "address",
+            "in": "formData",
+            "description": "address",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "gender",
+            "in": "formData",
+            "description": "user gender 'male' or 'female'",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "description": "image",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "device_token",
+            "in": "formData",
+            "description": "device token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "user logout",
+        "description": "",
+        "operationId": "user logout",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "The auth_key in user object must be send in 'Authorization' header.",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "device_token",
+            "in": "formData",
+            "description": "unique device token",
+            "required": true,
+            "type": "string",
+            "default": null
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/guest-login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "This service will return guest token and guest id ",
+        "description": "",
+        "operationId": "guest login",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "device_token",
+            "in": "formData",
+            "description": "unique device token",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "device_type",
+            "in": "formData",
+            "description": "Android or iphone",
+            "required": true,
+            "type": "string",
+            "default": null
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/events/get-all-events": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "summary": "Get all events ",
+        "description": "",
+        "operationId": "get events",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "The auth_key in user object must be send in 'Authorization' header.",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "user id",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "device_token",
+            "in": "query",
+            "description": "unique device token",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "set offset numbers with respect to pages",
+            "required": false,
+            "type": "string",
+            "default": null
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/get-all-education-guides": {
+      "get": {
+        "tags": [
+          "Education Guideline"
+        ],
+        "summary": "Returns education guidelines data",
+        "description": "",
+        "operationId": "educatio guideline",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "The auth_key in user object must be send in 'Authorization' header.",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "user id",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "device_token",
+            "in": "query",
+            "description": "unique device token",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "set offset numbers with respect to pages",
+            "required": false,
+            "type": "string",
+            "default": null
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/get-faqs": {
+      "post": {
+        "tags": [
+          "FAQ"
+        ],
+        "summary": "Update User Profile",
+        "description": "",
+        "operationId": "update user",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "The auth_key in user object must be send in 'Authorization' header.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "user id",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "device_token",
+            "in": "query",
+            "description": "unique device token",
+            "required": true,
+            "type": "string",
+            "default": null
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "set offset numbers with respect to pages",
+            "required": false,
+            "type": "string",
+            "default": null
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "bearer",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "definitions": {
+  }
+}

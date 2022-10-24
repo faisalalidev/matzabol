@@ -1,0 +1,30 @@
+[2017-10-07 16:05:56] production.ERROR: exception 'RuntimeException' with message 'Directory name must not be empty.' in E:\xampp\htdocs\artlounge\vendor\symfony\finder\Iterator\RecursiveDirectoryIterator.php:54
+Stack trace:
+#0 E:\xampp\htdocs\artlounge\vendor\symfony\finder\Iterator\RecursiveDirectoryIterator.php(54): RecursiveDirectoryIterator->__construct('', 4096)
+#1 E:\xampp\htdocs\artlounge\vendor\symfony\finder\Finder.php(669): Symfony\Component\Finder\Iterator\RecursiveDirectoryIterator->__construct('', 4096, false)
+#2 E:\xampp\htdocs\artlounge\vendor\symfony\finder\Finder.php(571): Symfony\Component\Finder\Finder->searchInDirectory('')
+#3 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\LoadConfiguration.php(87): Symfony\Component\Finder\Finder->getIterator()
+#4 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\LoadConfiguration.php(64): Illuminate\Foundation\Bootstrap\LoadConfiguration->getConfigurationFiles(Object(Illuminate\Foundation\Application))
+#5 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\LoadConfiguration.php(39): Illuminate\Foundation\Bootstrap\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\Foundation\Application), Object(Illuminate\Config\Repository))
+#6 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(208): Illuminate\Foundation\Bootstrap\LoadConfiguration->bootstrap(Object(Illuminate\Foundation\Application))
+#7 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(162): Illuminate\Foundation\Application->bootstrapWith(Array)
+#8 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(146): Illuminate\Foundation\Http\Kernel->bootstrap()
+#9 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(116): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#10 E:\xampp\htdocs\artlounge\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#11 E:\xampp\htdocs\artlounge\index.php(21): require_once('E:\\xampp\\htdocs...')
+#12 {main}  
+[2017-10-07 16:05:59] production.ERROR: exception 'RuntimeException' with message 'Directory name must not be empty.' in E:\xampp\htdocs\artlounge\vendor\symfony\finder\Iterator\RecursiveDirectoryIterator.php:54
+Stack trace:
+#0 E:\xampp\htdocs\artlounge\vendor\symfony\finder\Iterator\RecursiveDirectoryIterator.php(54): RecursiveDirectoryIterator->__construct('', 4096)
+#1 E:\xampp\htdocs\artlounge\vendor\symfony\finder\Finder.php(669): Symfony\Component\Finder\Iterator\RecursiveDirectoryIterator->__construct('', 4096, false)
+#2 E:\xampp\htdocs\artlounge\vendor\symfony\finder\Finder.php(571): Symfony\Component\Finder\Finder->searchInDirectory('')
+#3 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\LoadConfiguration.php(87): Symfony\Component\Finder\Finder->getIterator()
+#4 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\LoadConfiguration.php(64): Illuminate\Foundation\Bootstrap\LoadConfiguration->getConfigurationFiles(Object(Illuminate\Foundation\Application))
+#5 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\LoadConfiguration.php(39): Illuminate\Foundation\Bootstrap\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\Foundation\Application), Object(Illuminate\Config\Repository))
+#6 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(208): Illuminate\Foundation\Bootstrap\LoadConfiguration->bootstrap(Object(Illuminate\Foundation\Application))
+#7 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(162): Illuminate\Foundation\Application->bootstrapWith(Array)
+#8 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(146): Illuminate\Foundation\Http\Kernel->bootstrap()
+#9 E:\xampp\htdocs\artlounge\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(116): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#10 E:\xampp\htdocs\artlounge\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#11 E:\xampp\htdocs\artlounge\index.php(21): require_once('E:\\xampp\\htdocs...')
+#12 {main}  

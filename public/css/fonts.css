@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Alpaca';
+    src:url('../fonts/AlpacaScarlettDemo.woff') format('woff'),
+        url('../fonts/AlpacaScarlettDemo.woff2') format('woff2'),
+        url('../fonts/AlpacaScarlettDemo.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}

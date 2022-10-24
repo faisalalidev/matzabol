@@ -1,0 +1,114 @@
+To connect socket, pass query params 'user_id'
+eg: user_id=83&type=web
+
+On Socket Connect
+if user don't exists it returns:
+    event: alertuserdoesntexists
+    value: {}
+else
+    event: userOnline
+    type: broadcast
+    value: {user_id, username}
+
+    event: setUserInfo
+    value: userObject
+
+    event: getThreads
+    value: resposneObject with all threads of user
+
+
+Server listens to:
+    listener: joinRoom
+    parmas: {thread_id}
+
+On joinRoom Server emits:
+    event: threadJoined
+    value: {user_id, username, messages, pages, offset}
+
+after joining the room, server listens:
+    listener: sendMessage
+    params: {thread_id, user_id, message, username}
+
+after message sent, server emits to on both sender and receiver
+    event: newMessage
+    value: {thread_id, user_id, message, username}
+
+and emits:
+    event: messageReceivedByServer
+    value: {thread_id, user_id, message, username}
+
+server listen to:
+    listener: leaveRoom
+
+after server listen leaveRoom, it emits:
+    event: threadLeaved
+    value: {user_id, username}
+
+    event: getThreads
+    value: resposneObject with all threads of user
+
+on disconnect, server emits:
+    event: userOffline
+    type: broadcast,
+    value: {user_id, username}
+
+    event: threadLeaved
+    value: {user_id, username}   
+
+server listens:
+    listener: typing
+    params: thread_id
+
+and emits: 
+    event: typing
+    value: {user_id, username, thread_id}
+
+
+// Extra Features (Typing / Stop Typing)
+
+server listens:
+    listener: stopTyping
+    params: thread_id
+
+and emits: 
+    event: stopTyping
+    value: {user_id, username, thread_id}
+
+server listens:
+    listener: getMessagesByPageNumber
+    params: thread_id, offset
+
+server listens:
+    listener: messageReceived
+    params: message_id, sender_id, receiver_id
+
+and emit:
+    event: messageReceivedByReceiver
+    value: message_id, sender_id, receiver_id
+
+server listens:
+    listener: messageRead
+    params: message_id, sender_id, receiver_id
+
+and emit:
+    event: messageReadByReceiver
+    value: message_id, sender_id, receiver_id
+
+
+server listens:
+    listener: getUserThreads
+
+and emits:
+    event: getThreads
+    value: resposneObject with all threads of user
+
+server listens:
+    listener: getUnReadMessagesCountByThreadId
+    params: thread_id, user_id
+    acknowledgement callback params: unread_messages
+
+server listens:
+    listener: getUnReadMessagesCount
+    params: user_id
+    acknowledgement callback params: unread_messages
+
