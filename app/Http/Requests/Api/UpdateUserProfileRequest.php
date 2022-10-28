@@ -31,7 +31,7 @@ class UpdateUserProfileRequest extends FormRequest
     {
 
         return [
-            'user_id' => 'required|int',
+//            'user_id' => 'required|int',
             'phone_number' => 'unique:users,phone_number,'.$this->request->get('user_id'),
             'device_token' => 'nullable|string',
             'device_type' => 'nullable|in:ios,android'

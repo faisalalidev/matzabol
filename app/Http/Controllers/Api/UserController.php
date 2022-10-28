@@ -108,10 +108,10 @@ class UserController extends ApiBaseController
     public function updateProfile(UpdateUserProfileRequest $request)
     {
         $params = $request->all();
-        unset($params['user_id']);
-
+        dd($request->interest);
+//        unset($params['user_id']);
         try {
-            $res = $this->user->update($params, $request->user_id);
+            $res = $this->user->update($params, $request->id);
             if ($request->device_token && $request->device_type) {
                 $deviceData['device_token'] = $request->device_token;
                 $deviceData['device_type'] = $request->device_type;

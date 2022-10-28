@@ -54,7 +54,7 @@ Route::group(['middleware' => ['jwt.customAuth']], function () {
 
 /*User Routes*/
 Route::get('get-profile', 'Api\UserController@getUserProfile');
-Route::post('update-profile', 'Api\UserController@updateProfile');
+//Route::post('update-profile', 'Api\UserController@updateProfile');
 Route::post('update-aboutme', 'Api\UserController@updateProfile');
 Route::post('update-notification-settings', 'Api\UserController@updateProfile');
 Route::post('update-user-image', 'Api\UserController@updateImage');
@@ -79,6 +79,11 @@ Route::post('contact-us', 'Api\ContactusController@store');
 
 /*Faq*/
 Route::get('get-faqs', 'Api\FaqController@getAllFaq');
+
+
+/*interests*/
+Route::resource('interests', 'Api\InterestAPIController');
+
 
 /*Notification*/
 Route::get('get-admin-notifications', 'Api\NotificationController@getAdminNotificationByUserID'); // get admin notifications messages
