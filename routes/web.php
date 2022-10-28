@@ -77,6 +77,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin.auth', 'namespace' => 
     Route::get('/users-data', 'UserController@getDataTable');
     Route::get('users/{filter?}/{id?}', 'UserController@manageUser')->where(['filter' => '[a-z]+', 'id' => '[0-9]+']);
 
+    /*Interest Routes*/
+    Route::get('/interests-data', 'InterestController@getDataTable');
+    Route::get('interests/{filter?}/{id?}', 'InterestController@manageInterest')->where(['filter' => '[a-z]+', 'id' => '[0-9]+']);
+    Route::post('/interests/store', 'InterestController@store');
+
+
+//    Route::resource('interest', 'InterestController');
+//    Route::resource('users', 'UserController');
     /*Notifications*/
     Route::get('notifications/create', 'NotificationController@create');
     Route::post('notifications/store', 'NotificationController@store');

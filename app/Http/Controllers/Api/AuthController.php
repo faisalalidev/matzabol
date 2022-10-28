@@ -22,6 +22,7 @@ use Validator;
 use DB, Hash, Mail;
 use App\Models\NumberVerification;
 use Twilio;
+use Twilio\Rest\Client;
 
 class AuthController extends ApiBaseController
 {
@@ -46,29 +47,39 @@ class AuthController extends ApiBaseController
     public function login(LoginRequest $request)
 
     {
+        if($request->social){
+            return 'login with fb';
+        }
+      return $this->sendSms($request->phone_number);
+
+    }
+
+    public function sendSms($phone_number)
+    {
         $params = [];
-        $params['phone_number'] = $request->phone_number;
+        $params['phone_number'] = $phone_number;
         $params['verification_code'] = rand(1111, 9999);
-        $params['verification_code'] = 9999;
-
+        $params['verification_code'] ='9999';
+        $receiverNumber = $params['phone_number'];
+        $message = "Use verification code ".$params['verification_code']." for Matzabol login" ;
         try {
-
-            $message = 'Veil verification code ' . $params['verification_code'];
-//            if (Twilio::message($request->phone_number, $message)) {
-            $numberVerification = NumberVerification::firstOrNew(['phone_number' => $request->phone_number]);
+            $account_sid = getenv("TWILIO_SID");
+            $auth_token = getenv("TWILIO_TOKEN");
+            $twilio_number = getenv("TWILIO_FROM");
+            $client = new Client($account_sid, $auth_token);
+            $client->messages->create($receiverNumber, [
+                'from' => $twilio_number,
+                'body' => $message]);
+            $numberVerification = NumberVerification::firstOrNew(['phone_number' => $phone_number]);
             $numberVerification->phone_number = $params['phone_number'];
             $numberVerification->verification_code = $params['verification_code'];
             if ($numberVerification->save()) {
                 return RESTAPIHelper::response([], 200, 'Verification code send successfully.', $this->isBlocked);
             }
-//            }
-            return RESTAPIHelper::response([], 404, 'Number verification error.', $this->isBlocked);
-        } catch (\Exception $e) {
-            return RESTAPIHelper::response([], 500, $e->getMessage(), $this->isBlocked);
+        } catch (Exception $e) {
+            dd("Error: ". $e->getMessage());
         }
-
-    }
-
+}
     public function verifyCode(VerifyCodeRequest $request)
     {
         #dd($request->phone_number);
@@ -121,10 +132,12 @@ class AuthController extends ApiBaseController
         try {
             $numberVerification = NumberVerification::where(['phone_number' => $request->phone_number])->first();
             if ($numberVerification) {
-                $message = 'Veil verification code ' . $numberVerification->verification_code;
-                if (Twilio::message($request->phone_number, $message)) {
-                    return RESTAPIHelper::response([], 200, 'Verification code send successfully.', $this->isBlocked);
-                }
+
+               return $this->sendSms($request->phone_number);
+//                $message = 'Veil verification code ' . $numberVerification->verification_code;
+//                if (Twilio::message($request->phone_number, $message)) {
+//                    return RESTAPIHelper::response([], 200, 'Verification code send successfully.', $this->isBlocked);
+//                }
             }
 
             return RESTAPIHelper::response([], 404, 'No record found against provided number.', $this->isBlocked);
@@ -136,13 +149,9 @@ class AuthController extends ApiBaseController
 
     public function createProfile(CreateProfileRequest $request)
     {
-
         $params = $request->all();
-
         try {
-
             $res = $this->user->create($params);
-
             if ($res) {
                 $paramsDevices = [
                     'device_type'  => $request->device_type,
@@ -258,32 +267,51 @@ class AuthController extends ApiBaseController
 
     }
 
-    public function register(RegistationRequest $request)
+    public function register(Request $request)
     {
 
         $postData = $request->all();
-        $postData['name'] = $request->name;
-        $postData['email'] = $request->email;
-        $postData['password'] = bcrypt($request->password);
-        $postData['device_token'] = $request->device_token;
-        $postData['device_type'] = $request->device_type;
-        $postData['role_id'] = 2;
+        if($request->loginKey == 'phone'){
+            $validated = $request->validate([
+                'phone_number' => 'required',
+            ]);
+            $number = $this->user->getByNumber($request->phone_number);
+            if($number){
+                return RESTAPIHelper::response([], 401, 'Phone Number Already Exists');
+            }
+            $postData['email'] = $request->phone_number.'@matzabol.com';
+            $postData['name'] = ($request->name) ? $request->name : '';
+            $postData['fname'] = ($request->fname) ? $request->fname : '';
+            $postData['lname'] = ($request->lname) ? $request->lname : '';
+            $postData['password'] = bcrypt(rand(11111111,99999999));
+            $postData['device_token'] = $request->device_token;
+            $postData['device_type'] = $request->device_type;
+            $postData['role_id'] = 2;
+            if ($this->uDevice->getByDeviceToken($request->device_token)) {
+                $this->uDevice->deleteByDeviceToken($request->device_token);
+            }
 
+            $user = $this->user->create($postData);
 
-        if ($this->uDevice->getByDeviceToken($request->device_token)) {
-            $this->uDevice->deleteByDeviceToken($request->device_token);
+            $credentials = [
+                'email'       => $postData['email'],
+                'password'    => $postData['password'],
+                'is_verified' => 1
+            ];
+            $token = JWTAuth::attempt($credentials);
+            $userById = $this->user->find($user->id);
+            $userById['token'] = $token;
+
+            return $this->sendSms($request->phone_number);
         }
 
-        $user = $this->user->create($postData);
 
-        $credentials = [
-            'email'       => $request->email,
-            'password'    => $request->password,
-            'is_verified' => 1
-        ];
-        $token = JWTAuth::attempt($credentials);
-        $userById = $this->user->find($user->id);
-        $userById['token'] = $token;
+
+
+
+
+
+
 
         return RESTAPIHelper::response(['user' => $userById]);
 
