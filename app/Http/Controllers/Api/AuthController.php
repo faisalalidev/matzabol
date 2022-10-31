@@ -276,9 +276,9 @@ class AuthController extends ApiBaseController
                 'phone_number' => 'required',
             ]);
             $number = $this->user->getByNumber($request->phone_number);
-            if($number){
+           /* if($number){
                 return RESTAPIHelper::response([], 401, 'Phone Number Already Exists');
-            }
+            }*/
             $postData['email'] = $request->phone_number.'@matzabol.com';
             $postData['name'] = ($request->name) ? $request->name : '';
             $postData['fname'] = ($request->fname) ? $request->fname : '';
