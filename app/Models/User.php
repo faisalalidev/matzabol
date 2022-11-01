@@ -19,7 +19,9 @@ class User extends Authenticatable
         'about_me', 'latitude', 'longitude', 'notify_new_matches',
         'notify_message', 'notify_booster', 'is_rewind', 'first_rewind_date',
         'rewind_count', 'first_boost_date', 'boost_count', 'current_city', 'current_country'
-        , 'education_detail', 'password'
+        , 'education_detail', 'password',
+        'fname',
+        'lname',
     ];
 
     protected $casts =

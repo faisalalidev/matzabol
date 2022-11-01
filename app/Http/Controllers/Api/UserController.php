@@ -132,12 +132,11 @@ class UserController extends ApiBaseController
                     $data['user_id'] = $request->id;
                     $data['interest_id'] = $request->interest;
                     UserInterest::updateOrCreate($data);
-//                    UserInterest::
                 }
             }
             if ($res) {
-                $this->getUserBlockedStatus($request->user_id);
-                return RESTAPIHelper::response(['user' => $this->user->getByIdWithImages($request->user_id)], 200, 'Profile Updated successfully.', $this->isBlocked);
+                $this->getUserBlockedStatus($request->id);
+                return RESTAPIHelper::response(['user' => $this->user->getByIdWithImages($request->id)], 200, 'Profile Updated successfully.', $this->isBlocked);
             }
 
             return RESTAPIHelper::response([], 404, 'Error in update profile.', $this->isBlocked);
