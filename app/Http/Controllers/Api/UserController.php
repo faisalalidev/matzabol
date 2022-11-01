@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\UserInterest;
 use function App\Helper\sendPushNotifications;
 use App\Helper\Utils;
 use App\Helpers\RESTAPIHelper;
@@ -108,7 +109,7 @@ class UserController extends ApiBaseController
     public function updateProfile(UpdateUserProfileRequest $request)
     {
         $params = $request->all();
-        dd($request->interest);
+
 //        unset($params['user_id']);
         try {
             $res = $this->user->update($params, $request->id);
@@ -117,6 +118,22 @@ class UserController extends ApiBaseController
                 $deviceData['device_type'] = $request->device_type;
                 $deviceData['user_id'] = $request->user_id;
                 $this->udevice->updateDeviceToken($deviceData);
+            }
+            if ($request->has('interest')) {
+                try {
+                    $userInterest =  UserInterest::where('user_id',$request->id)->get();
+                    $interest = explode(',', $request->interest);
+                        foreach ($interest as $row) {
+                            $data['user_id'] = $request->id;
+                            $data['interest_id'] = $row;
+                            UserInterest::updateOrCreate($data);
+                        }
+                } catch (Exception $exception) {
+                    $data['user_id'] = $request->id;
+                    $data['interest_id'] = $request->interest;
+                    UserInterest::updateOrCreate($data);
+//                    UserInterest::
+                }
             }
             if ($res) {
                 $this->getUserBlockedStatus($request->user_id);
