@@ -83,6 +83,8 @@ Route::get('get-faqs', 'Api\FaqController@getAllFaq');
 
 /*interests*/
 Route::resource('interests', 'Api\InterestAPIController');
+Route::resource('religion', 'Api\ReligionAPIController');
+Route::resource('prompts', 'Api\PromptAPIController');
 
 
 /*Notification*/
