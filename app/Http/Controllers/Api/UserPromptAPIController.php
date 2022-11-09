@@ -19,9 +19,10 @@ class UserPromptAPIController extends Controller
         $this->user = $userService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return $this->userPromptrepository->getDataTable();
+
+        return $this->userPromptrepository->getDataTable($request->user_id);
     }
 
     public function store(Request $request)
