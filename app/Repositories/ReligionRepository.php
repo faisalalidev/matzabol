@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use Czim\Repository\BaseRepository;
-use App\Religion;
+use App\Models\Religion;
 
 class ReligionRepository extends BaseRepository
 {

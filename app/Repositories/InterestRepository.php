@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use Czim\Repository\BaseRepository;
-use App\Interest;
+use App\Models\Interest;
 
 class InterestRepository extends BaseRepository
 {
