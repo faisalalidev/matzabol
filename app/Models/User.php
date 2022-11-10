@@ -34,6 +34,9 @@ class User extends Authenticatable
         'password', 'remember_token', 'deleted_at'
     ];
 
+    protected $with = [
+      'userImage'
+    ];
     public function userImage()
     {
         return $this->hasMany('App\Models\UserImage');

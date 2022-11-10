@@ -16,10 +16,12 @@ class UserPromptRepository extends BaseRepository
     {
         return UserPrompt::class;
     }
-    public function getDataTable()
+    public function getDataTable($user_id = 0)
     {
-        return $this->model
-            ->orderBy('created_at', 'ASC')
+
+        return $this->model->when($user_id, function ($query) use ($user_id){
+            $query->where('user_id', $user_id);
+        })->orderBy('created_at', 'ASC')
             ->get();
     }
     public function setData($data) {
