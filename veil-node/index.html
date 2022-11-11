@@ -41,8 +41,8 @@
      );*/
 
     //localhost
-    let socket = io.connect(window.location.host + ':3007', {transports: ["websocket"], reconnect: true});
-    //let socket = io.connect('http://motox.aspenweather.net:3007', {transports: ["websocket"], reconnect: true});
+    // let socket = io.connect(window.location.host + ':3007', {transports: ["websocket"], reconnect: true});
+    let socket = io.connect('http://cscart.landbw.co:3007', {transports: ["websocket"], reconnect: true});
     //let socket = io.connect(window.location.host, {transports: ["websocket"], reconnect: true});
 
     console.log(socket);

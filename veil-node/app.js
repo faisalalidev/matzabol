@@ -9,7 +9,7 @@ const
         pingInterval: 1000 * 10,
         pingTimeout: 1000 * 5,
     }),
-    port = process.env.PORT || 3001,
+    port = process.env.PORT || 3007,
     validator = require("validator"),
     mysql = require("mysql"),
     apn = require('apn');
