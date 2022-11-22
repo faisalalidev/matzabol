@@ -21,7 +21,6 @@ class UserPromptAPIController extends Controller
 
     public function index(Request $request)
     {
-
         return $this->userPromptrepository->getDataTable($request->user_id);
     }
 
@@ -31,6 +30,7 @@ class UserPromptAPIController extends Controller
 //            dd($request->video);
             $filename = $request->video->store('users');
         }
+
         $res = UserPrompt::create([
             'user_id'    => $request->user_id,
             'prompt_id'      => $request->prompt_id,

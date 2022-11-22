@@ -18,6 +18,7 @@ class ApiBaseController extends Controller
 
     protected function getUserBlockedStatus($user_id)
     {
+
         if ($this->user->getUserStatus($user_id) == 0) {
             $this->isBlocked = 1;
         }
