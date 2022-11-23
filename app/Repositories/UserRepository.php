@@ -203,7 +203,9 @@ class UserRepository extends BaseRepository
     {
         $circle_radius = Config::get('constants.radius_circle');
         #  $max_distance = 20;
-
+        $preference_value =$params['user']['gender_prefer'];
+        $preference_arr = preg_split ("/\,/", $preference_value);
+//        dd($preference_arr);
         $res = [];
         $preference = $params['user_preference'];
         if (!$preference) {
@@ -245,7 +247,7 @@ class UserRepository extends BaseRepository
                     ->from('user_reports')
                     ->where('user_reports.sender_id', '=', $params['user_id']);
             })
-            ->where('users.gender', '<>', $params['user']['gender'])
+            ->whereIn('users.gender', $preference_arr)
             ->where('users.status', '=', '1')
             ->where('users.role_id', '=', '2')
             ->when($preference->by_country, function ($query) use ($preference) {
@@ -264,9 +266,9 @@ class UserRepository extends BaseRepository
                 $max = (int)$range[1];
                 return $query->whereRaw('YEAR(CURDATE()) - YEAR(STR_TO_DATE(users.dob,"%M %d %Y")) BETWEEN ' . $min . ' AND ' . $max . '');
             })
-            ->when($preference->by_ethnicity, function ($query) use ($preference) {
-                return $query->where('users.ethnicity', $preference->ethnicity);
-            })
+//            ->when($preference->by_ethnicity, function ($query) use ($preference) {
+//                return $query->where('users.ethnicity', $preference->ethnicity);
+//            })
 //            ->toSql();
             ->get();
 //        dd($resCount);
@@ -297,7 +299,7 @@ class UserRepository extends BaseRepository
                         ->from('user_reports')
                         ->where('user_reports.sender_id', '=', $params['user_id']);
                 })
-                ->where('users.gender', '<>', $params['user']['gender'])
+                ->whereIn('users.gender', $preference_arr)
                 ->where('users.status', '=', '1')
                 ->where('users.role_id', '=', '2')
                 ->when($preference->by_country, function ($query) use ($preference) {

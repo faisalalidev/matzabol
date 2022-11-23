@@ -113,6 +113,7 @@ class UserController extends ApiBaseController
 
         if($request->email){
             $email['email'] = $request->email;
+            $email['gender_prefer'] = $request->gender_prefer;
             $userEmail = User::where('id' ,$request->id)->update($email);
         }
 //        unset($params['user_id']);
