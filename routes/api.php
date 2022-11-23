@@ -88,6 +88,7 @@ Route::resource('religion', 'Api\ReligionAPIController');
 Route::resource('prompts', 'Api\PromptAPIController');
 Route::resource('user_prompts', 'Api\UserPromptAPIController');
 Route::resource('events', 'Api\EventAPIController');
+Route::post('events/join', 'Api\EventAPIController@join');
 
 
 /*Notification*/
