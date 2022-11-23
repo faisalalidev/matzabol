@@ -21,8 +21,8 @@ class UserPromptAPIController extends Controller
 
     public function index(Request $request)
     {
-        if($request->user_id)
-        return $this->userPromptrepository->getDataTable($request->user_id);
+         return RESTAPIHelper::response(['user_prompt' => $this->userPromptrepository->getDataTable($request->user_id)], 200, 'Fetch successfully.', $this->isBlocked);
+
     }
 
     public function store(Request $request)
