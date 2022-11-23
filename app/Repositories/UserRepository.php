@@ -178,8 +178,9 @@ class UserRepository extends BaseRepository
     }
 
     public function getUserStatus($id)
-    {
-        $user = $this->model->select('status')->where('id', $id)->first();
+    {   $user = $this->model->
+        select('status')
+        ->where('id', $id)->first();
         return $user->status;
     }
 
@@ -202,6 +203,7 @@ class UserRepository extends BaseRepository
     {
         $circle_radius = Config::get('constants.radius_circle');
         #  $max_distance = 20;
+
         $res = [];
         $preference = $params['user_preference'];
         if (!$preference) {
@@ -220,8 +222,6 @@ class UserRepository extends BaseRepository
 
         $start_limit = ($params['offset'] - 1) * $params['limit'];
         $params['offset'] = ($start_limit < 0) ? 0 : $start_limit;
-
-
         // Get count
 
         $resCount = $this->model
@@ -272,7 +272,7 @@ class UserRepository extends BaseRepository
 //        dd($resCount);
         $resCount = $resCount->count();
 
-
+//dd($resCount);
         if ($resCount > 0) {
 
             /*Result Set*/
@@ -461,7 +461,6 @@ class UserRepository extends BaseRepository
     /*Get profiles who liked user(by id)*/
     public function profilesWhoLiked($params)
     {
-
         $res = [];
 
         $resCount = $this->model
@@ -473,7 +472,6 @@ class UserRepository extends BaseRepository
             ->where('users.status', '=', '1')
             ->having('reported', '=', 'FALSE')->get();
 //            ->count();
-
         if ($resCount->count() > 0) {
 
             $res['data'] = $this->model

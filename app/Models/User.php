@@ -13,13 +13,15 @@ class User extends Authenticatable
     use SoftDeletes;
 
     protected $fillable = [
+        'id',
         'full_name', 'phone_number', 'dob', 'gender', 'marrital_status',
         'religion_cast', 'height', 'country', 'ethnicity', 'nationality',
         'language', 'profession', 'education', 'religion', 'my_status',
         'about_me', 'latitude', 'longitude', 'notify_new_matches',
         'notify_message', 'notify_booster', 'is_rewind', 'first_rewind_date',
         'rewind_count', 'first_boost_date', 'boost_count', 'current_city', 'current_country'
-        , 'education_detail', 'password',
+        ,'education_detail', 'password',
+        'status',
         'fname',
         'lname',
     ];

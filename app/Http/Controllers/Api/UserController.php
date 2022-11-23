@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use App\Models\UserInterest;
 use function App\Helper\sendPushNotifications;
 use App\Helper\Utils;
@@ -110,6 +111,10 @@ class UserController extends ApiBaseController
     {
         $params = $request->all();
 
+        if($request->email){
+            $email['email'] = $request->email;
+            $userEmail = User::where('id' ,$request->id)->update($email);
+        }
 //        unset($params['user_id']);
         try {
             $res = $this->user->update($params, $request->id);

@@ -21,6 +21,7 @@ class UserPromptAPIController extends Controller
 
     public function index(Request $request)
     {
+        if($request->user_id)
         return $this->userPromptrepository->getDataTable($request->user_id);
     }
 
