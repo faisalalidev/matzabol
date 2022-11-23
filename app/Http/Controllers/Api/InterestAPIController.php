@@ -46,4 +46,11 @@ class InterestAPIController extends Controller
 
     }
 
+    public function genderList()
+    {
+        $gender[1] = 'Women';
+        $gender[2] = 'Man';
+        $gender[3] = 'Other';
+        return RESTAPIHelper::response( $gender, 200, 'Gender Fetch successfully.', $this->isBlocked);
+    }
 }

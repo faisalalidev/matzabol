@@ -79,6 +79,7 @@ Route::post('contact-us', 'Api\ContactusController@store');
 
 /*Faq*/
 Route::get('get-faqs', 'Api\FaqController@getAllFaq');
+Route::get('interests/gender-list', 'Api\InterestAPIController@genderList');
 
 
 /*interests*/
