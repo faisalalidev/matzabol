@@ -66,7 +66,7 @@ Route::post('user-activity', 'Api\UserController@userProfileActivity');
 Route::post('update-search-preferences', 'Api\UserController@updateUserSearchPreference');
 Route::get('get-my-liked-profiles', 'Api\UserController@getRelativeProfilesByUserId'); //Get those users profiles, I have liked or boosted profiles
 Route::get('get-my-boosters', 'Api\UserController@getUserBoosters');  //get those users profile who boost me
-Route::get('who-has-liked-me', 'Api\UserController@getWhoLikedMe'); // get those users profiles wo liked me
+Route::post('who-has-liked-me', 'Api\UserController@getWhoLikedMe'); // get those users profiles wo liked me
 Route::put('report-user', 'Api\UserController@userReport'); //report user fake,bad language, others etc
 Route::post('rewind-user', 'Api\UserController@rewindUser'); // rewind user
 Route::get('get-notification-count', 'Api\UserController@getNotificationCount'); // Get notification count
