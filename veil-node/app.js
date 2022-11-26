@@ -468,6 +468,8 @@ io.on("connection", function (socket) {
     /*============= Update Message Status to Read =================*/
 
     socket.on("getUserThreads", function () {
+
+        console.log('TEST');
         // get threads by user id
         /*markMessageAsReadForAllThreads(socket.user_id, function(error, result){
          console.log('Mark All Chats as Read');
