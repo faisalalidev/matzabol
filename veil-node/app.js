@@ -476,6 +476,7 @@ io.on("connection", function (socket) {
          });*/
         getThreadsByUser(socket, socket.user_id, function (error, threads) {
             rooms[socket.user_id] = threads;
+            console.log(threads);
             // emit getThreads event to client and return threads based on user id
             socket.emit("getThreads", response(threads, 200, "Threads found!"));
         });
