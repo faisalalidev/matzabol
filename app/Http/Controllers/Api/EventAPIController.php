@@ -23,6 +23,13 @@ class EventAPIController extends Controller
 
     }
 
+    public function show($id)
+    {
+        return RESTAPIHelper::response(['event' =>  $this->eventRepo->getEvent($id)], 200, 'Event Fetch successfully.', $this->isBlocked);
+
+
+    }
+
     public function join(Request $request)
     {
         $eventJoin['user_id']= $request->user_id;

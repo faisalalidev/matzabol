@@ -24,7 +24,7 @@ class UserInterest extends Model
 
     public function getNameAttribute()
     {
-        if($this->interest()->count()){ 
+        if($this->interest()->count()){
             $interest= Interest::where('id', $this->attributes['interest_id'])->first();
             return $interest->name;
         }

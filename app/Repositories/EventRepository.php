@@ -16,9 +16,15 @@ class EventRepository extends BaseRepository
     {
         return Event::class;
     }
-    public function getDataTable()
+
+    public function getEvent($id)
     {
-        return $this->model
+        return $this->model->where('id',$id)
+            ->first();
+    }
+    public function getDataTable($data = [])
+    {
+        return $this->model->when()
             ->orderBy('created_at', 'ASC')
             ->get();
     }
