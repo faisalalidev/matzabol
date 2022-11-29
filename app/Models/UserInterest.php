@@ -13,4 +13,21 @@ class UserInterest extends Model
         'user_id',
         'interest_id',
     ];
+
+    protected $appends = [
+        'name'
+    ];
+    public function interest()
+    {
+        return $this->hasMany(Interest::class,'id', 'interest_id');
+    }
+
+    public function getNameAttribute()
+    {
+        if($this->interest()->count()){ 
+            $interest= Interest::where('id', $this->attributes['interest_id'])->first();
+            return $interest->name;
+        }
+        return [];
+    }
 }

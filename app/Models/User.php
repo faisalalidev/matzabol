@@ -38,7 +38,8 @@ class User extends Authenticatable
     ];
 
     protected $with = [
-      'userImage'
+      'userImage',
+      'user_interests',
     ];
     public function userImage()
     {
@@ -65,5 +66,9 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Notification')->withPivot('is_read');
     }
 
+    public function user_interests()
+    {
+       return $this->hasMany(UserInterest::class,'user_id');
+    }
 
 }
