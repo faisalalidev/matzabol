@@ -111,6 +111,19 @@ class AuthController extends ApiBaseController
                     $res->userDevice()->create($postData);
 
                     $token = JWTAuth::fromUser($res);
+                    $twilioAccountSid = getenv("TWILIO_SID");
+                    $twilioApiKey= 'SK9d27b32ab75b2cc4dbe9fa5e8daf47a2';
+                    $twilioApiSecret = 'CIzMRiw0ydH4FzlkCFOq4zXoRJ5vcX2d';
+                    $identity = "fedi";
+
+                    $Twiliotoken = new Twilio\Jwt\AccessToken(
+                        $twilioAccountSid,
+                        $twilioApiKey,
+                        $twilioApiSecret,
+                        3600,
+                        $identity
+                    );
+                    $res['twilio_accessToken'] = $Twiliotoken->toJWT();
                     return RESTAPIHelper::response(['user' => $res], 200, 'Code verified successfully.', $this->isBlocked, $token);
                 } else {
                     return RESTAPIHelper::response([], 200, 'Code verified successfully.', $this->isBlocked);
