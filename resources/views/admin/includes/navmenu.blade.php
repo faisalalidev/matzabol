@@ -41,6 +41,13 @@
                             <i class="fa {{ $value['icon'] }} fa-fw"> </i> {{ str_replace(["_","-"]," ",ucfirst($key)) }} </a>
                     </li>
                 @endforeach
+
+                <li>
+                    <a href="{{ url('/admin/events') }}"><i class="fa fa-dashboard fa-fw"></i> Events</a>
+                </li>
+                <li>
+                    <a href="{{ url('/admin/interests') }}"><i class="fa fa-dashboard fa-fw"></i> Interest</a>
+                </li>
                 <li>
                     <a href="#"><i class="fa fa-cogs fa-fw"></i> Settings<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level" aria-expanded="false" style="">
