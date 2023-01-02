@@ -83,6 +83,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin.auth', 'namespace' => 
     Route::post('/interests/store', 'InterestController@store');
 
 
+    /*Event Routes*/
+    Route::get('/events-data', 'EventController@getDataTable');
+    Route::get('events/{filter?}/{id?}', 'EventController@manageEvent')->where(['filter' => '[a-z]+', 'id' => '[0-9]+']);
+    Route::post('/events/store', 'EventController@store');
+
 //    Route::resource('interest', 'InterestController');
 //    Route::resource('users', 'UserController');
     /*Notifications*/

@@ -25,6 +25,7 @@ class User extends Authenticatable
         'fname',
         'lname',
         'gender_prefer',
+        'is_completed_profile',
     ];
 
     protected $casts =

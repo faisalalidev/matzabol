@@ -24,7 +24,7 @@ class EventRepository extends BaseRepository
     }
     public function getDataTable($data = [])
     {
-        return $this->model->when()
+        return $this->model
             ->orderBy('created_at', 'ASC')
             ->get();
     }
