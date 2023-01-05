@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\UserConversation;
 use App\Models\UserInterest;
 use function App\Helper\sendPushNotifications;
 use App\Helper\Utils;
@@ -1019,6 +1020,19 @@ class UserController extends ApiBaseController
             //return false;
             #  return RESTAPIHelper::response([], 404, 'Already Boosted, Liked or Disliked', $this->isBlocked);
         }*/
+    }
+
+    public function addConversation(Request $request)
+    {
+        $input = $request->all();
+        $conversation = UserConversation::create($input);
+        return RESTAPIHelper::response($conversation, 200, 'Conversation Created');
+    }
+
+    public function getConversation($id)
+    {
+        $conversation = UserConversation::where('sender_id', $id)->with('user')->get();
+        return RESTAPIHelper::response($conversation, 200, 'Conversation Fetch');
     }
 
 
