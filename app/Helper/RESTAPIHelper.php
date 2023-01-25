@@ -14,8 +14,7 @@ class RESTAPIHelper
         $response['token'] = $authToken;
         $response['pages'] = $pages;
 
-
-        return response()->json($response);
+        return response()->json($response,$code);
     }
 
     public static function emptyResponse($status = true, $dev_message = '', $format = 'json')

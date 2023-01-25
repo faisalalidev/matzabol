@@ -21,7 +21,6 @@ class authJWT extends GetUserFromToken{
         if (! $token = $this->auth->setRequest($request)->getToken()) {
             return RESTAPIHelper::response([], 404, 'Token not provided');
         }
-
         try {
             $user = $this->auth->authenticate($token);
         } catch (TokenExpiredException $e) {
@@ -29,11 +28,10 @@ class authJWT extends GetUserFromToken{
         } catch (JWTException $e) {
             return RESTAPIHelper::response([], 404, 'Invalid token.');
         }
-
-        if (! $user) {
-            return RESTAPIHelper::response([], 404, 'User not found');
+        if (!$user) {
+            return RESTAPIHelper::response(['user' => 'User not found'], 404, 'User not found.');
+//            return RESTAPIHelper::response([], 404, 'User not found');
         }
-
         $this->events->fire('tymon.jwt.valid', $user);
 
         return $next($request);
