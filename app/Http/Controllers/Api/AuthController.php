@@ -123,6 +123,7 @@ class AuthController extends ApiBaseController
                         3600,
                         $identity
                     );
+                    $res['token'] = $token;
                     $res['twilio_accessToken'] = $Twiliotoken->toJWT();
                     return RESTAPIHelper::response(['user' => $res], 200, 'Code verified successfully.', $this->isBlocked, $token);
                 } else {
