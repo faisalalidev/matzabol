@@ -115,7 +115,7 @@ class AuthController extends ApiBaseController
                     $twilioApiKey= 'SK9d27b32ab75b2cc4dbe9fa5e8daf47a2';
                     $twilioApiSecret = 'CIzMRiw0ydH4FzlkCFOq4zXoRJ5vcX2d';
                     $identity = $res->id;
-
+                    $serviceSid = 'ISa34adb2ecac944b39739ca1f309f2c94';
                     $Twiliotoken = new Twilio\Jwt\AccessToken(
                         $twilioAccountSid,
                         $twilioApiKey,
@@ -123,6 +123,11 @@ class AuthController extends ApiBaseController
                         3600,
                         $identity
                     );
+                    $chatGrant = new Twilio\Jwt\Grants\ChatGrant();
+                    $chatGrant->setServiceSid($serviceSid);
+                // Add grant to token
+                    $Twiliotoken->addGrant($chatGrant);
+
                     $res['token'] = $token;
                     $res['twilio_accessToken'] = $Twiliotoken->toJWT();
                     return RESTAPIHelper::response(['user' => $res], 200, 'Code verified successfully.', $this->isBlocked, $token);
