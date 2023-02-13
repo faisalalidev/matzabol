@@ -111,7 +111,7 @@ class UserController extends ApiBaseController
     public function updateProfile(UpdateUserProfileRequest $request)
     {
         $params = $request->all();
-
+dd($params);
         if($request->email){
             $email['email'] = $request->email;
             $email['gender_prefer'] = $request->gender_prefer;
@@ -119,6 +119,10 @@ class UserController extends ApiBaseController
         }
 //        unset($params['user_id']);
         try {
+            if ($request->hasFile('profile_image')) {
+                $filename = $request->image->store('users');
+                $params['profile_image'] = $filename;
+            }
             $res = $this->user->update($params, $request->id);
             if ($request->device_token && $request->device_type) {
                 $deviceData['device_token'] = $request->device_token;
@@ -141,6 +145,8 @@ class UserController extends ApiBaseController
                     UserInterest::updateOrCreate($data);
                 }
             }
+
+
             if ($res) {
                 $this->getUserBlockedStatus($request->id);
                 return RESTAPIHelper::response(['user' => $this->user->getByIdWithImages($request->id)], 200, 'Profile Updated successfully.', $this->isBlocked);
