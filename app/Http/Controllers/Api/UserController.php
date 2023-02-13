@@ -273,9 +273,12 @@ class UserController extends ApiBaseController
                 $res = $this->user->getSearchProfiles($params);
                 if ($res) {
                     $this->getUserBlockedStatus($request->user_id);
+
+
                     return RESTAPIHelper::response(['user' => $res['data']], 200, 'Profile found successfully.', $this->isBlocked, '', $res['pages']);
                 } else {
-                    return RESTAPIHelper::response([], 404, 'No record found.', $this->isBlocked);
+                    return RESTAPIHelper::response(['user' => []], 200, 'No record found.', $this->isBlocked);
+//                    return RESTAPIHelper::response([], 404, 'No record found.', $this->isBlocked);
                 }
             } else {
                 return RESTAPIHelper::response([], 404, 'User not found.');
