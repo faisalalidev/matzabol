@@ -45,7 +45,7 @@ Route::get('get-dropdowns', 'Api\DropdownController@getDropdowns');
 
 
 Route::group(['middleware' => ['jwt.customAuth']], function () {
-    Route::put('update-profile/{id}', 'Api\UserController@updateProfile');
+    Route::post('update-profile/{id}', 'Api\UserController@updateProfile');
 });
 
 /*****************************JWT middleware Auths****************************************************/

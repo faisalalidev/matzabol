@@ -111,7 +111,6 @@ class UserController extends ApiBaseController
     public function updateProfile(UpdateUserProfileRequest $request)
     {
         $params = $request->all();
-dd($params);
         if($request->email){
             $email['email'] = $request->email;
             $email['gender_prefer'] = $request->gender_prefer;
@@ -120,7 +119,7 @@ dd($params);
 //        unset($params['user_id']);
         try {
             if ($request->hasFile('profile_image')) {
-                $filename = $request->image->store('users');
+                $filename = $request->profile_image->store('users');
                 $params['profile_image'] = $filename;
             }
             $res = $this->user->update($params, $request->id);

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Config;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -43,6 +44,8 @@ class User extends Authenticatable
       'userImage',
       'user_interests',
     ];
+
+    protected $appends = ['profile_url'];
     public function userImage()
     {
         return $this->hasMany('App\Models\UserImage');
@@ -71,6 +74,12 @@ class User extends Authenticatable
     public function user_interests()
     {
        return $this->hasMany(UserInterest::class,'user_id');
+    }
+
+    public function getProfileUrlAttribute()
+    {
+        $url = asset(Storage::url('app/' . $this->profile_image));
+        return $url;
     }
 
 }
