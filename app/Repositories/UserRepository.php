@@ -201,6 +201,7 @@ class UserRepository extends BaseRepository
 
     public function getSearchProfiles($params)
     {
+//        dd($params['user']['gender_prefer']);
         $circle_radius = Config::get('constants.radius_circle');
         #  $max_distance = 20;
         $preference_value =$params['user']['gender_prefer'];
@@ -225,7 +226,7 @@ class UserRepository extends BaseRepository
         $start_limit = ($params['offset'] - 1) * $params['limit'];
         $params['offset'] = ($start_limit < 0) ? 0 : $start_limit;
         // Get count
-
+//dd($preference_arr);
         $resCount = $this->model
             ->select('users.*')
             ->selectRaw('( ? * acos( cos( radians(?) ) *
@@ -274,7 +275,7 @@ class UserRepository extends BaseRepository
 //        dd($resCount);
         $resCount = $resCount->count();
 
-//dd($resCount);
+dd($resCount);
         if ($resCount > 0) {
 
             /*Result Set*/
