@@ -274,8 +274,6 @@ class UserRepository extends BaseRepository
             ->get();
 //        dd($resCount);
         $resCount = $resCount->count();
-
-dd($resCount);
         if ($resCount > 0) {
 
             /*Result Set*/
