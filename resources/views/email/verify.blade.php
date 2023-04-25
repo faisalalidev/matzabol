@@ -10,7 +10,7 @@
     <br>
     Thank you for creating an account with us.
     <br>
-    Your varification code : {{$verification_code}}
+    Your verification code : {{$verification_code}}
     <br/>
 </div>
 

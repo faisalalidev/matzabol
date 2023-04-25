@@ -88,7 +88,14 @@ class AuthController extends ApiBaseController
         $params['verification_code'] = $request->verification_code;
 
         try {
-
+//            DB::table('password_resets')->insert(['email' => $email, 'code' => $code]);
+//            \Illuminate\Support\Facades\Mail::send('email.verify', ['name' => $user->name, 'verification_code' => $code],
+//                function ($mail) use ($email, $name, $subject) {
+//                    $mail->from(getenv('FROM_EMAIL_ADDRESS'), "From Matzabol");
+//                    $mail->to($email, $name);
+//                    $mail->subject($subject);
+//
+//                });
             $verificationNumner = NumberVerification::where([
                 'phone_number'      => $params['phone_number'],
                 'verification_code' => $params['verification_code']
@@ -267,7 +274,7 @@ class AuthController extends ApiBaseController
             }
 
             DB::table('password_resets')->insert(['email' => $email, 'code' => $code]);
-            Mail::send('email.verify', ['name' => $user->name, 'verification_code' => $code],
+            \Illuminate\Support\Facades\Mail::send('email.verify', ['name' => $user->name, 'verification_code' => $code],
                 function ($mail) use ($email, $name, $subject) {
                     $mail->from(getenv('FROM_EMAIL_ADDRESS'), "From Education-USA");
                     $mail->to($email, $name);

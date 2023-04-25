@@ -27,6 +27,9 @@ class User extends Authenticatable
         'lname',
         'gender_prefer',
         'is_completed_profile',
+        'fb_url',
+        'twitter_url',
+        'insta_url',
         'profile_image',
     ];
 

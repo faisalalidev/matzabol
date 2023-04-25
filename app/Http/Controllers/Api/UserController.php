@@ -510,7 +510,10 @@ class UserController extends ApiBaseController
     {
         $res = array();
 
-        if ($request->by_location == '1' && $request->by_country == '1') {
+    if(is_null($this->user->find($request->user_id))){
+        return RESTAPIHelper::response([], 404, 'User Not found', $this->isBlocked);
+    }
+    if ($request->by_location == '1' && $request->by_country == '1') {
             return RESTAPIHelper::response([], 404, 'Country and location cannot be select at a time', $this->isBlocked);
         }
 
