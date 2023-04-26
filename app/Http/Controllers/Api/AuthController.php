@@ -66,9 +66,9 @@ class AuthController extends ApiBaseController
             $auth_token = getenv("TWILIO_TOKEN");
             $twilio_number = getenv("TWILIO_FROM");
             $client = new Client($account_sid, $auth_token);
-//            $client->messages->create($receiverNumber, [
-//                'from' => $twilio_number,
-//                'body' => $message]);
+            $client->messages->create($receiverNumber, [
+                'from' => $twilio_number,
+                'body' => $message]);
             $numberVerification = NumberVerification::firstOrNew(['phone_number' => $phone_number]);
             $numberVerification->phone_number = $params['phone_number'];
             $numberVerification->verification_code = $params['verification_code'];
@@ -118,10 +118,12 @@ class AuthController extends ApiBaseController
 
                     $token = JWTAuth::fromUser($res);
                     $twilioAccountSid = getenv("TWILIO_SID");
-                    $twilioApiKey= 'SK9d27b32ab75b2cc4dbe9fa5e8daf47a2';
-                    $twilioApiSecret = 'CIzMRiw0ydH4FzlkCFOq4zXoRJ5vcX2d';
+//                  $twilioApiKey= 'SK9d27b32ab75b2cc4dbe9fa5e8daf47a2';
+//                  $twilioApiSecret = 'CIzMRiw0ydH4FzlkCFOq4zXoRJ5vcX2d';
+                    $twilioApiKey= 'SK85215b3eb5af497d88dc3f3af32f9985';
+                    $twilioApiSecret = 'IvPQc5dkE9OZsbjIO2fm717vk4Gkbi8P';
                     $identity = $res->id;
-                    $serviceSid = 'ISa34adb2ecac944b39739ca1f309f2c94';
+                    $serviceSid = 'ACaf418de1f8e90ce615e6398ccaffc03c';
                     $Twiliotoken = new Twilio\Jwt\AccessToken(
                         $twilioAccountSid,
                         $twilioApiKey,
