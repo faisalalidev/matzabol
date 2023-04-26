@@ -18,12 +18,12 @@ use  SoftDeletes;
     ];
 
     protected $with=[
-'user'
+        'receiver'
     ];
 
-    public function user()
+    public function receiver()
     {
-       $user =  $this->hasOne(User::class,'id','sender_id');
-    return $user;
+       $user =  $this->hasOne(User::class,'id','receiver_id');
+       return $user;
     }
 }

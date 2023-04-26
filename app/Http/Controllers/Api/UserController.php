@@ -1042,7 +1042,7 @@ class UserController extends ApiBaseController
 
     public function getConversation($id)
     {
-        $conversation = UserConversation::where('sender_id', $id)->with('user')->get();
+        $conversation = UserConversation::where('sender_id', $id)->with('receiver')->get();
         return RESTAPIHelper::response($conversation, 200, 'Conversation Fetch');
     }
 
