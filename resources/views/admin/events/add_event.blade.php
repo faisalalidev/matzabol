@@ -64,6 +64,17 @@
                                     @endif
                                 </div>
 
+                                <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
+                                    {!! Form::label('type', 'Type') !!}
+                                    {!! Form::select('type', [
+                                        'online' =>'Online',
+                                        'inperson'=> 'In Person'],
+                                        null, ['class' => 'form-control', 'required' => 'required']) !!}
+                                    @if ( $errors->has('type') )
+                                        <p class="help-block">{{ $errors->first('type') }}</p>
+                                    @endif
+                                </div>
+
 
                                 <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                     {!! Form::label('image', 'Image') !!}
@@ -72,6 +83,7 @@
                                         <p class="help-block">{{ $errors->first('image') }}</p>
                                     @endif
                                 </div>
+
 
 
 
