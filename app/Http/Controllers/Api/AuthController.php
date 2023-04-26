@@ -120,10 +120,10 @@ class AuthController extends ApiBaseController
                     $twilioAccountSid = getenv("TWILIO_SID");
 //                  $twilioApiKey= 'SK9d27b32ab75b2cc4dbe9fa5e8daf47a2';
 //                  $twilioApiSecret = 'CIzMRiw0ydH4FzlkCFOq4zXoRJ5vcX2d';
-                    $twilioApiKey= 'SK85215b3eb5af497d88dc3f3af32f9985';
-                    $twilioApiSecret = 'IvPQc5dkE9OZsbjIO2fm717vk4Gkbi8P';
+                    $twilioApiKey= 'SK5d589373620bc501a1db35312aded4a4';
+                    $twilioApiSecret = 'pRYGWTkFaOsio9dL1flZBBZPas9uMJuQ';
                     $identity = $res->id;
-                    $serviceSid = 'ACaf418de1f8e90ce615e6398ccaffc03c';
+                    $serviceSid = 'SMbec6c391de5d46adc4f949fe1631c0a2';
                     $Twiliotoken = new Twilio\Jwt\AccessToken(
                         $twilioAccountSid,
                         $twilioApiKey,
