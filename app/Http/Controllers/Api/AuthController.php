@@ -126,7 +126,7 @@ class AuthController extends ApiBaseController
                         $twilioAccountSid,
                         $twilioApiKey,
                         $twilioApiSecret,
-                        3600,
+                        86400,
                         $identity
                     );
                     $chatGrant = new Twilio\Jwt\Grants\ChatGrant();
