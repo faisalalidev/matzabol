@@ -355,30 +355,33 @@ class UserController extends ApiBaseController
     /*like , dislike and boost api function*/
     public function userProfileActivity(ProfileActivityRequest $request)
     {
+
         $res['match'] = false;
 
         try {
             $postData = $request->all();
+
             $postData['sender_id'] = $postData['user_id'];
-
-
             Switch ($request->type) {
                 case 'like':
+
                     if (!$this->userActivity->isLikeActivityExists($postData)) {
+
                         if (!$this->userActivity->isMatch($postData)) {
                             //$postData['is_like'] = "1";
                             //$userActivity = $this->userActivity->create($postData);
+
                             $userActivity = $this->userActivity->updateOrCreate([
                                 'sender_id'   => $postData['sender_id'],
                                 'reciever_id' => $postData['reciever_id']
                             ], $postData);
 
                             /*Create A Notification for receiver*/
-                            $notificationData['message'] = Config::get('constants.notifications')['4']['msg'];
-                            $notificationData['action_type'] = Config::get('constants.notifications')['4']['title'];
-                            $notificationData['ref_id'] = $userActivity->id;
-                            $notification = $this->notification->create($notificationData);
-                            $notification->users()->attach($userActivity->reciever_id);
+//                            $notificationData['message'] = Config::get('constants.notifications')['4']['msg'];
+//                            $notificationData['action_type'] = Config::get('constants.notifications')['4']['title'];
+//                            $notificationData['ref_id'] = $userActivity->id;
+//                            $notification = $this->notification->create($notificationData);
+//                            $notification->users()->attach($userActivity->reciever_id);
 
                             $isMatch = $this->userActivity->isMatch($postData);
 

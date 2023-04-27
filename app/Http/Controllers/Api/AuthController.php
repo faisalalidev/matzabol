@@ -105,8 +105,6 @@ class AuthController extends ApiBaseController
                 if ($this->uDevice->getByDeviceToken($request->device_token)) {
                     $this->uDevice->deleteByDeviceToken($request->device_token);
                 }
-
-
                 $verificationNumner->delete();
                 $res = $this->user->getByNumber($params['phone_number']);
 
@@ -141,7 +139,7 @@ class AuthController extends ApiBaseController
                     $res['twilio_accessToken'] = $Twiliotoken->toJWT();
                     return RESTAPIHelper::response(['user' => $res], 200, 'Code verified successfully.', $this->isBlocked, $token);
                 } else {
-                    return RESTAPIHelper::response([], 200, 'Code verified successfully.', $this->isBlocked);
+                    return RESTAPIHelper::response([], 404, 'User Not Found.', $this->isBlocked);
                 }
             }
             return RESTAPIHelper::response([], 404, 'Code not found.', $this->isBlocked);

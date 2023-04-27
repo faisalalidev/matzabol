@@ -33,7 +33,7 @@ class ProfileLikeDislikeRepository extends BaseRepository
 
     public function isLikeActivityExists($data)
     {
-        return $this->model
+         return $this->model
             ->where([
                 ['sender_id', '=', $data['sender_id']],
                 ['reciever_id', '=', $data['reciever_id']],
@@ -64,9 +64,13 @@ class ProfileLikeDislikeRepository extends BaseRepository
         	    (pldb.type = "like" OR pldb.type = "boost") AND ((pldb.reciever_id = ' . $data['reciever_id'] . ' AND pldb.sender_id = ' . $data['sender_id'] . ') OR (pldb.reciever_id = ' . $data['sender_id'] . ' AND pldb.sender_id = ' . $data['reciever_id'] . ')))
         	    as is_match')
             ->first();
-
-        if ($match->is_match) {
-            return true;
+        if ($match) {
+            if($match->is_match){
+                return true;
+            }
+            else {
+                return false;
+            }
         } else {
             return false;
         }
