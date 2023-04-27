@@ -66,9 +66,9 @@ class AuthController extends ApiBaseController
             $auth_token = getenv("TWILIO_TOKEN");
             $twilio_number = getenv("TWILIO_FROM");
             $client = new Client($account_sid, $auth_token);
-            $client->messages->create($receiverNumber, [
-                'from' => $twilio_number,
-                'body' => $message]);
+//            $client->messages->create($receiverNumber, [
+//                'from' => $twilio_number,
+//                'body' => $message]);
             $numberVerification = NumberVerification::firstOrNew(['phone_number' => $phone_number]);
             $numberVerification->phone_number = $params['phone_number'];
             $numberVerification->verification_code = $params['verification_code'];
