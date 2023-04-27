@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use App\Models\UserConversation;
 use App\Models\UserInterest;
+use http\Client;
 use function App\Helper\sendPushNotifications;
 use App\Helper\Utils;
 use App\Helpers\RESTAPIHelper;
@@ -39,6 +40,8 @@ use Illuminate\Support\Facades\Storage;
 use JWTAuth, Validator;
 use DB;
 use Mockery\Exception;
+use Twilio;
+
 
 
 class UserController extends ApiBaseController
@@ -392,6 +395,33 @@ class UserController extends ApiBaseController
                                 $extraPayLoadData['action_type'] = Config::get('constants.notifications')['2']['title'];
                                 $this->sendPush(Config::get('constants.notifications')['2']['msg'], $extraPayLoadData);
 
+                                //Creating Twilio Chat
+                                $sid = getenv("TWILIO_SID");
+                                $token = getenv("TWILIO_TOKEN");
+                                $twilio = new Twilio\Rest\Client($sid, $token);
+                                $conversation = $twilio->conversations->v1->conversations
+                                    ->create([
+                                            "friendlyName" => "Friendly Conversation"
+                                        ]
+                                    );
+                                if($conversation){
+                                    $twilio->conversations->v1->conversations($conversation->sid)
+                                        ->participants
+                                        ->create([
+                                                "Identity" => $postData['user_id'],
+                                            ]
+                                        );
+                                    $twilio->conversations->v1->conversations($conversation->sid)
+                                        ->participants
+                                        ->create([
+                                                "Identity" => $postData['reciever_id'],
+                                            ]
+                                        );
+                                }
+                                $input['sender_id'] = $postData['user_id'];
+                                $input['twillio_sid'] = $conversation->sid;
+                                $input['receiver_id'] =  $postData['reciever_id'];
+                                $conversation = UserConversation::create($input);
                                 $res['match'] = true;
                                 $user = $this->user->getByIdWithImages($request->user_id);
 
