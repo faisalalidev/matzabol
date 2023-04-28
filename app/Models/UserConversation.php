@@ -26,4 +26,9 @@ use  SoftDeletes;
        $user =  $this->hasOne(User::class,'id','receiver_id');
        return $user;
     }
+    public function sender()
+    {
+        $user =  $this->hasOne(User::class,'id','sender_id');
+        return $user;
+    }
 }
