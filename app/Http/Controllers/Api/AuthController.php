@@ -130,11 +130,23 @@ class AuthController extends ApiBaseController
                         86400,
                         $identity
                     );
+                    //TWILIO Chat TOKEN
                     $chatGrant = new Twilio\Jwt\Grants\ChatGrant();
                     $chatGrant->setServiceSid($serviceSid);
-                // Add grant to token
                     $Twiliotoken->addGrant($chatGrant);
-
+                    //TWILIO Video TOKEN
+                    $videoGrant = new Twilio\Jwt\Grants\VideoGrant();
+                    $roomName =  $postData['user_id'];
+                    $videoGrant->setRoom($roomName);
+                    $Twiliotoken->addGrant($videoGrant);
+                    //TWILIO Voice TOKEN
+                    $voiceGrant = new Twilio\Jwt\Grants\VoiceGrant();
+                    $voiceGrant->setOutgoingApplicationSid($serviceSid);
+                    $voiceGrant->setIncomingAllow(true);
+                    //Add grant to token
+                    $Twiliotoken->addGrant($voiceGrant);
+                    // render token to string
+                    echo $token->toJWT();
                     $res['token'] = $token;
                     $res['twilio_accessToken'] = $Twiliotoken->toJWT();
                     return RESTAPIHelper::response(['user' => $res], 200, 'Code verified successfully.', $this->isBlocked, $token);
