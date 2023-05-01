@@ -31,6 +31,7 @@ class User extends Authenticatable
         'twitter_url',
         'insta_url',
         'profile_image',
+        'is_verified',
     ];
 
     protected $casts =
