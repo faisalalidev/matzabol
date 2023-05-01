@@ -209,6 +209,8 @@ class UserRepository extends BaseRepository
 //        dd($preference_arr);
         $res = [];
         $preference = $params['user_preference'];
+        $preference['religion'] = $params['religion'];
+
         if (!$preference) {
             $preference['by_country'] = 0;
             $preference['by_age_range'] = 0;
@@ -266,6 +268,8 @@ class UserRepository extends BaseRepository
                 $min = (int)$range[0];
                 $max = (int)$range[1];
                 return $query->whereRaw('YEAR(CURDATE()) - YEAR(STR_TO_DATE(users.dob,"%M %d %Y")) BETWEEN ' . $min . ' AND ' . $max . '');
+            })->when($preference->religion, function ($query) use ($preference) {
+                return $query->where('religion',$preference->religion );
             })
 //            ->when($preference->by_ethnicity, function ($query) use ($preference) {
 //                return $query->where('users.ethnicity', $preference->ethnicity);
