@@ -146,7 +146,7 @@ class AuthController extends ApiBaseController
                     //Add grant to token
                     $Twiliotoken->addGrant($voiceGrant);
                     // render token to string
-                    echo $token->toJWT();
+//                    echo $token->toJWT();
                     $res['token'] = $token;
                     $res['twilio_accessToken'] = $Twiliotoken->toJWT();
                     return RESTAPIHelper::response(['user' => $res], 200, 'Code verified successfully.', $this->isBlocked, $token);
