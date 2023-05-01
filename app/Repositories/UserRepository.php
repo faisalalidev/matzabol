@@ -209,7 +209,7 @@ class UserRepository extends BaseRepository
 //        dd($preference_arr);
         $res = [];
         $preference = $params['user_preference'];
-        $preference['religion'] = $params['religion'];
+//        $preference['religion'] = $params['religion'];
 
         if (!$preference) {
             $preference['by_country'] = 0;
