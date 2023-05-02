@@ -21,4 +21,10 @@ class Event extends Model
         'image',
         'type',
     ];
+
+
+    public function users()
+    {
+       return $this->hasMany(EventJoin::class,'event_id');
+    }
 }

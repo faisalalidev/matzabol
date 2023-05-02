@@ -49,19 +49,46 @@ class AuthController extends ApiBaseController
         if($request->social){
             return 'login with fb';
         }
-      return $this->sendSms($request->phone_number);
+      return $this->sendSms($request);
 
     }
 
-    public function sendSms($phone_number)
+    public function sendSms($request)
     {
+        if($request->loginKey == 'phone'){
+            $params = [];
+            $params['phone_number'] = $request->phone_number;
+            $params['verification_code'] = rand(1111, 9999);
+            $params['verification_code'] ='9999';
+            $receiverNumber = $params['phone_number'];
+            $message = "Use verification code ".$params['verification_code']." for Matzabol login" ;
+            try {
+                $account_sid = getenv("TWILIO_SID");
+                $auth_token = getenv("TWILIO_TOKEN");
+                $twilio_number = getenv("TWILIO_FROM");
+                $client = new Client($account_sid, $auth_token);
+//            $client->messages->create($receiverNumber, [
+//                'from' => $twilio_number,
+//                'body' => $message]);
+                $numberVerification = NumberVerification::firstOrNew(['phone_number' => $request->phone_number]);
+                $numberVerification->phone_number = $params['phone_number'];
+                $numberVerification->verification_code = $params['verification_code'];
+                if ($numberVerification->save()) {
+                    return RESTAPIHelper::response([], 200, 'Verification code send successfully.', $this->isBlocked);
+                }
+            } catch (Exception $e) {
+                dd("Error: ". $e->getMessage());
+            }
+        }
+        else if($request->loginKey == 'email'){
         $params = [];
-        $params['phone_number'] = $phone_number;
+        $params['email'] = $request->email;
         $params['verification_code'] = rand(1111, 9999);
         $params['verification_code'] ='9999';
-        $receiverNumber = $params['phone_number'];
+        $receiverEmail = $params['email'];
         $message = "Use verification code ".$params['verification_code']." for Matzabol login" ;
         try {
+            //TODO EMAIL WORK
             $account_sid = getenv("TWILIO_SID");
             $auth_token = getenv("TWILIO_TOKEN");
             $twilio_number = getenv("TWILIO_FROM");
@@ -69,8 +96,8 @@ class AuthController extends ApiBaseController
 //            $client->messages->create($receiverNumber, [
 //                'from' => $twilio_number,
 //                'body' => $message]);
-            $numberVerification = NumberVerification::firstOrNew(['phone_number' => $phone_number]);
-            $numberVerification->phone_number = $params['phone_number'];
+            $numberVerification = NumberVerification::firstOrNew(['email' => $request->email]);
+            $numberVerification->email = $params['email'];
             $numberVerification->verification_code = $params['verification_code'];
             if ($numberVerification->save()) {
                 return RESTAPIHelper::response([], 200, 'Verification code send successfully.', $this->isBlocked);
@@ -78,16 +105,88 @@ class AuthController extends ApiBaseController
         } catch (Exception $e) {
             dd("Error: ". $e->getMessage());
         }
-}
+        }
+    }
     public function verifyCode(VerifyCodeRequest $request)
     {
+
         #dd($request->phone_number);
         $params = [];
 
-        $params['phone_number'] = $request->phone_number;
-        $params['verification_code'] = $request->verification_code;
+        if($request->loginKey == 'phone'){
+            try {
+                $params['phone_number'] = $request->phone_number;
+                $params['verification_code'] = $request->verification_code;
+                $verificationNumner = NumberVerification::where([
+                    'phone_number'      => $params['phone_number'],
+                    'verification_code' => $params['verification_code']
+                ])->first();
 
-        try {
+                if ($verificationNumner) {
+                    if ($this->uDevice->getByDeviceToken($request->device_token)) {
+                        $this->uDevice->deleteByDeviceToken($request->device_token);
+                    }
+                    $verificationNumner->delete();
+                    $res = $this->user->getByNumber($params['phone_number']);
+
+                    if ($res) {
+                        $postData['device_type'] = $request->device_type;
+                        $postData['device_token'] = $request->device_token;
+                        $postData['user_id'] = $res->id;
+                        $res->userDevice()->create($postData);
+
+                        $token = JWTAuth::fromUser($res);
+                        $twilioAccountSid = getenv("TWILIO_SID");
+//                      $twilioApiKey= 'SK9d27b32ab75b2cc4dbe9fa5e8daf47a2';
+//                      $twilioApiSecret = 'CIzMRiw0ydH4FzlkCFOq4zXoRJ5vcX2d';
+                        $twilioApiKey= 'SKc877965934a3484debe1a49e3b73b38c';
+                        $twilioApiSecret = 'I9EmGYyvROEi7R7f1Ra6bzhyUkSxofZy';
+                        $identity = $res->id;
+//                  https://console.twilio.com/us1/develop/conversations/manage/services?frameUrl=%2Fconsole%2Fconversations%2Fservices%3Fx-target-region%3Dus1
+                        $serviceSid = 'ISc5bc180c61de4ba48a4eb3b418c25de5';
+                        $Twiliotoken = new Twilio\Jwt\AccessToken(
+                            $twilioAccountSid,
+                            $twilioApiKey,
+                            $twilioApiSecret,
+                            86400,
+                            $identity
+                        );
+                        //TWILIO Chat TOKEN
+                        $chatGrant = new Twilio\Jwt\Grants\ChatGrant();
+                        $chatGrant->setServiceSid($serviceSid);
+                        $Twiliotoken->addGrant($chatGrant);
+                        //TWILIO Video TOKEN
+                        $videoGrant = new Twilio\Jwt\Grants\VideoGrant();
+                        $roomName =  $postData['user_id'];
+                        $videoGrant->setRoom($roomName);
+                        $Twiliotoken->addGrant($videoGrant);
+                        //TWILIO Voice TOKEN
+                        $voiceGrant = new Twilio\Jwt\Grants\VoiceGrant();
+                        $voiceGrant->setOutgoingApplicationSid($serviceSid);
+                        $voiceGrant->setIncomingAllow(true);
+                        //Add grant to token
+                        $Twiliotoken->addGrant($voiceGrant);
+                        // render token to string
+//                    echo $token->toJWT();
+                        $res['token'] = $token;
+                        $res['twilio_accessToken'] = $Twiliotoken->toJWT();
+                        return RESTAPIHelper::response(['user' => $res], 200, 'Code verified successfully.', $this->isBlocked, $token);
+                    } else {
+                        return RESTAPIHelper::response([], 404, 'User Not Found.', $this->isBlocked);
+                    }
+                }
+                return RESTAPIHelper::response([], 404, 'Code not found.', $this->isBlocked);
+
+            } catch (\Exception $e) {
+                return RESTAPIHelper::response([], 500, $e->getMessage(), $this->isBlocked);
+            }
+        }
+
+        if($request->loginKey == 'email'){
+
+            $params['email'] = $request->email;
+            $params['verification_code'] = $request->verification_code;
+            try {
 //            DB::table('password_resets')->insert(['email' => $email, 'code' => $code]);
 //            \Illuminate\Support\Facades\Mail::send('email.verify', ['name' => $user->name, 'verification_code' => $code],
 //                function ($mail) use ($email, $name, $subject) {
@@ -96,69 +195,70 @@ class AuthController extends ApiBaseController
 //                    $mail->subject($subject);
 //
 //                });
-            $verificationNumner = NumberVerification::where([
-                'phone_number'      => $params['phone_number'],
-                'verification_code' => $params['verification_code']
-            ])->first();
+                $verificationNumner = NumberVerification::where([
+                    'email'      => $params['email'],
+                    'verification_code' => $params['verification_code']
+                ])->first();
 
-            if ($verificationNumner) {
-                if ($this->uDevice->getByDeviceToken($request->device_token)) {
-                    $this->uDevice->deleteByDeviceToken($request->device_token);
-                }
-                $verificationNumner->delete();
-                $res = $this->user->getByNumber($params['phone_number']);
+                if ($verificationNumner) {
+                    if ($this->uDevice->getByDeviceToken($request->device_token)) {
+                        $this->uDevice->deleteByDeviceToken($request->device_token);
+                    }
+                    $verificationNumner->delete();
+                    $res = $this->user->getByEmail($params['email']);
+                    if ($res) {
+                        $postData['device_type'] = $request->device_type;
+                        $postData['device_token'] = $request->device_token;
+                        $postData['user_id'] = $res->id;
+                        $res->userDevice()->create($postData);
 
-                if ($res) {
-                    $postData['device_type'] = $request->device_type;
-                    $postData['device_token'] = $request->device_token;
-                    $postData['user_id'] = $res->id;
-                    $res->userDevice()->create($postData);
-
-                    $token = JWTAuth::fromUser($res);
-                    $twilioAccountSid = getenv("TWILIO_SID");
+                        $token = JWTAuth::fromUser($res);
+                        $twilioAccountSid = getenv("TWILIO_SID");
 //                  $twilioApiKey= 'SK9d27b32ab75b2cc4dbe9fa5e8daf47a2';
 //                  $twilioApiSecret = 'CIzMRiw0ydH4FzlkCFOq4zXoRJ5vcX2d';
-                    $twilioApiKey= 'SKc877965934a3484debe1a49e3b73b38c';
-                    $twilioApiSecret = 'I9EmGYyvROEi7R7f1Ra6bzhyUkSxofZy';
-                    $identity = $res->id;
+                        $twilioApiKey= 'SKc877965934a3484debe1a49e3b73b38c';
+                        $twilioApiSecret = 'I9EmGYyvROEi7R7f1Ra6bzhyUkSxofZy';
+                        $identity = $res->id;
 //                  https://console.twilio.com/us1/develop/conversations/manage/services?frameUrl=%2Fconsole%2Fconversations%2Fservices%3Fx-target-region%3Dus1
-                    $serviceSid = 'ISc5bc180c61de4ba48a4eb3b418c25de5';
-                    $Twiliotoken = new Twilio\Jwt\AccessToken(
-                        $twilioAccountSid,
-                        $twilioApiKey,
-                        $twilioApiSecret,
-                        86400,
-                        $identity
-                    );
-                    //TWILIO Chat TOKEN
-                    $chatGrant = new Twilio\Jwt\Grants\ChatGrant();
-                    $chatGrant->setServiceSid($serviceSid);
-                    $Twiliotoken->addGrant($chatGrant);
-                    //TWILIO Video TOKEN
-                    $videoGrant = new Twilio\Jwt\Grants\VideoGrant();
-                    $roomName =  $postData['user_id'];
-                    $videoGrant->setRoom($roomName);
-                    $Twiliotoken->addGrant($videoGrant);
-                    //TWILIO Voice TOKEN
-                    $voiceGrant = new Twilio\Jwt\Grants\VoiceGrant();
-                    $voiceGrant->setOutgoingApplicationSid($serviceSid);
-                    $voiceGrant->setIncomingAllow(true);
-                    //Add grant to token
-                    $Twiliotoken->addGrant($voiceGrant);
-                    // render token to string
+                        $serviceSid = 'ISc5bc180c61de4ba48a4eb3b418c25de5';
+                        $Twiliotoken = new Twilio\Jwt\AccessToken(
+                            $twilioAccountSid,
+                            $twilioApiKey,
+                            $twilioApiSecret,
+                            86400,
+                            $identity
+                        );
+                        //TWILIO Chat TOKEN
+                        $chatGrant = new Twilio\Jwt\Grants\ChatGrant();
+                        $chatGrant->setServiceSid($serviceSid);
+                        $Twiliotoken->addGrant($chatGrant);
+                        //TWILIO Video TOKEN
+                        $videoGrant = new Twilio\Jwt\Grants\VideoGrant();
+                        $roomName =  $postData['user_id'];
+                        $videoGrant->setRoom($roomName);
+                        $Twiliotoken->addGrant($videoGrant);
+                        //TWILIO Voice TOKEN
+                        $voiceGrant = new Twilio\Jwt\Grants\VoiceGrant();
+                        $voiceGrant->setOutgoingApplicationSid($serviceSid);
+                        $voiceGrant->setIncomingAllow(true);
+                        //Add grant to token
+                        $Twiliotoken->addGrant($voiceGrant);
+                        // render token to string
 //                    echo $token->toJWT();
-                    $res['token'] = $token;
-                    $res['twilio_accessToken'] = $Twiliotoken->toJWT();
-                    return RESTAPIHelper::response(['user' => $res], 200, 'Code verified successfully.', $this->isBlocked, $token);
-                } else {
-                    return RESTAPIHelper::response([], 404, 'User Not Found.', $this->isBlocked);
+                        $res['token'] = $token;
+                        $res['twilio_accessToken'] = $Twiliotoken->toJWT();
+                        return RESTAPIHelper::response(['user' => $res], 200, 'Code verified successfully.', $this->isBlocked, $token);
+                    } else {
+                        return RESTAPIHelper::response([], 404, 'User Not Found.', $this->isBlocked);
+                    }
                 }
-            }
-            return RESTAPIHelper::response([], 404, 'Code not found.', $this->isBlocked);
+                return RESTAPIHelper::response([], 404, 'Code not found.', $this->isBlocked);
 
-        } catch (\Exception $e) {
-            return RESTAPIHelper::response([], 500, $e->getMessage(), $this->isBlocked);
+            } catch (\Exception $e) {
+                return RESTAPIHelper::response([], 500, $e->getMessage(), $this->isBlocked);
+            }
         }
+
 
     }
 
@@ -336,7 +436,7 @@ class AuthController extends ApiBaseController
             $token = JWTAuth::attempt($credentials);
             $userById = $this->user->find($user->id);
             $userById['token'] = $token;
-            return $this->sendSms($request->phone_number);
+            return $this->sendSms($request);
         }
         else if($request->loginKey == 'email'){
             $validated = $request->validate([
@@ -369,7 +469,7 @@ class AuthController extends ApiBaseController
             $userById = $this->user->find($user->id);
             $userById['token'] = $token;
 
-//            return $this->sendSms($request->phone_number);
+            return $this->sendSms($request);
         }
         return RESTAPIHelper::response(['user' => $userById]);
 

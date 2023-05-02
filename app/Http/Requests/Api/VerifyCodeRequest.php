@@ -22,7 +22,7 @@ class VerifyCodeRequest extends FormRequest
     {
         return [
             'verification_code' => 'required',
-            'phone_number' => 'required',
+//            'phone_number' => 'required',
             'device_token' => 'required',
             'device_type' => 'required|in:ios,android'
 

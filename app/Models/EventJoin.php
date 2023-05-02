@@ -17,4 +17,11 @@ class EventJoin extends Model
         'user_id',
         'event_id',
     ];
+    protected $with=[
+        'userInfo'
+    ];
+    public function userInfo()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
 }

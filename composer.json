@@ -8,6 +8,7 @@
         "php": ">=7.1",
         "aloha/twilio": "^3.0",
         "czim/laravel-repository": "^1.4",
+        "doctrine/dbal": "^2.10",
         "edujugon/push-notification": "^2.2",
         "gbrock/laravel-table": "0.3.4",
         "guzzlehttp/guzzle": "~5.3|~6.0",

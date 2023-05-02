@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\RESTAPIHelper;
+use App\Models\Event;
 use App\Models\EventJoin;
 use App\Repositories\EventRepository;
 use Illuminate\Http\Request;
@@ -37,8 +38,13 @@ class EventAPIController extends Controller
         return RESTAPIHelper::response(['event' => $event], 200, 'Event Fetch successfully.', $this->isBlocked);
     }
 
-    public function eventUser($id)
+    public function eventUser(Request $request, $id)
     {
+        $event = Event::with('users')->where('id',$id)->first();
+        if($request->user_id){
 
+        }
+
+        return RESTAPIHelper::response(['event' => $event], 200, 'Event Fetch successfully.', $this->isBlocked);
     }
 }

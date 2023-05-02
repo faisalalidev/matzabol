@@ -32,6 +32,7 @@ class User extends Authenticatable
         'insta_url',
         'profile_image',
         'is_verified',
+        'email',
     ];
 
     protected $casts =
