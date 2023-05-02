@@ -56,6 +56,10 @@ class AuthController extends ApiBaseController
     public function sendSms($request)
     {
         if($request->loginKey == 'phone'){
+            $res = $this->user->getByNumber($request->phone_number);
+            if(!$res){
+                return RESTAPIHelper::response([], 404, 'User Not Found.', $this->isBlocked);
+            }
             $params = [];
             $params['phone_number'] = $request->phone_number;
             $params['verification_code'] = rand(1111, 9999);
@@ -88,6 +92,10 @@ class AuthController extends ApiBaseController
         $receiverEmail = $params['email'];
         $message = "Use verification code ".$params['verification_code']." for Matzabol login" ;
         try {
+            $res = $this->user->getByEmail($request->email);
+            if(!$res){
+                return RESTAPIHelper::response([], 404, 'User Not Found.', $this->isBlocked);
+            }
             //TODO EMAIL WORK
             $account_sid = getenv("TWILIO_SID");
             $auth_token = getenv("TWILIO_TOKEN");
