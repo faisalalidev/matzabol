@@ -86,5 +86,20 @@ class User extends Authenticatable
         $url = asset(Storage::url('app/' . $this->profile_image));
         return $url;
     }
+    public function matches()
+    {
+        return $this->hasMany(EventUserMatch::class);
+    }
+
+    public function getMatchesAttribute()
+    {
+        return $this->matches()->get() ?: collect();
+    }
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'event_users')
+            ->withTimestamps();
+    }
 
 }

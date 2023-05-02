@@ -24,4 +24,11 @@ class EventJoin extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+
+    // Define the "event" relationship
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
+
 }

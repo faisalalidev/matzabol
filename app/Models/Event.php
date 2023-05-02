@@ -23,8 +23,19 @@ class Event extends Model
     ];
 
 
-    public function users()
+    public function usersInfo()
     {
        return $this->hasMany(EventJoin::class,'event_id');
+    }
+
+    public function matches()
+    {
+        return $this->hasMany(EventUserMatch::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'event_users')
+            ->withTimestamps();
     }
 }
