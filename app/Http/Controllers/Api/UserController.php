@@ -262,8 +262,7 @@ class UserController extends ApiBaseController
                          if ($res) $is_rewind = '0';
                      }
                  }*/
-
-
+                
                 $params['user'] = $userData;
                 $params['user_preference'] = $this->searchPreferences->find($userData->id, ['*'], 'user_id');
 
@@ -271,13 +270,10 @@ class UserController extends ApiBaseController
                 {
                     $this->pendingRequests($request->pending_requests);
                 }
-
-
+                
                 $res = $this->user->getSearchProfiles($params);
                 if ($res) {
                     $this->getUserBlockedStatus($request->user_id);
-
-
                     return RESTAPIHelper::response(['user' => $res['data']], 200, 'Profile found successfully.', $this->isBlocked, '', $res['pages']);
                 } else {
                     return RESTAPIHelper::response(['user' => []], 200, 'No record found.', $this->isBlocked);

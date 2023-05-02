@@ -307,7 +307,6 @@ class AuthController extends ApiBaseController
 
     public function register(Request $request)
     {
-
         $postData = $request->all();
         if($request->loginKey == 'phone'){
             $validated = $request->validate([
@@ -318,6 +317,36 @@ class AuthController extends ApiBaseController
                 return RESTAPIHelper::response([], 401, 'Phone Number Already Exists');
             }
             $postData['email'] = $request->phone_number.'@matzabol.com';
+            $postData['name'] = ($request->name) ? $request->name : '';
+            $postData['fname'] = ($request->fname) ? $request->fname : '';
+            $postData['lname'] = ($request->lname) ? $request->lname : '';
+            $postData['password'] = bcrypt(rand(11111111,99999999));
+            $postData['device_token'] = $request->device_token;
+            $postData['device_type'] = $request->device_type;
+            $postData['role_id'] = 2;
+            if ($this->uDevice->getByDeviceToken($request->device_token)) {
+                $this->uDevice->deleteByDeviceToken($request->device_token);
+            }
+            $user = $this->user->create($postData);
+            $credentials = [
+                'email'       => $postData['email'],
+                'password'    => $postData['password'],
+                'is_verified' => 1
+            ];
+            $token = JWTAuth::attempt($credentials);
+            $userById = $this->user->find($user->id);
+            $userById['token'] = $token;
+            return $this->sendSms($request->phone_number);
+        }
+        else if($request->loginKey == 'email'){
+            $validated = $request->validate([
+                'email' => 'required',
+            ]);
+            $email = $this->user->getByEmail($request->email);
+            if($email){
+                return RESTAPIHelper::response([], 401, 'Email Already Exists');
+            }
+            $postData['email'] = $request->email;
             $postData['name'] = ($request->name) ? $request->name : '';
             $postData['fname'] = ($request->fname) ? $request->fname : '';
             $postData['lname'] = ($request->lname) ? $request->lname : '';
@@ -340,17 +369,8 @@ class AuthController extends ApiBaseController
             $userById = $this->user->find($user->id);
             $userById['token'] = $token;
 
-            return $this->sendSms($request->phone_number);
+//            return $this->sendSms($request->phone_number);
         }
-
-
-
-
-
-
-
-
-
         return RESTAPIHelper::response(['user' => $userById]);
 
     }
