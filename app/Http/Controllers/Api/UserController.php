@@ -176,7 +176,7 @@ class UserController extends ApiBaseController
                         $res = UserImage::create([
                             'user_id'    => $request->user_id,
                             'image'      => $filename,
-                            'sort_order' => $request->sort_order
+                            'sort_order' => 2
                         ]);
 
                         if ($res) {
