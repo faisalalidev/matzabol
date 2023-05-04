@@ -53,7 +53,7 @@ class User extends Authenticatable
     protected $appends = ['profile_url'];
     public function userImage()
     {
-        return $this->hasMany('App\Models\UserImage');
+        return $this->hasMany('App\Models\UserImage')->orderBy('sort_order');
     }
 
     public function userDevice()
