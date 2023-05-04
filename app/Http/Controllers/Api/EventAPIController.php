@@ -34,10 +34,18 @@ class EventAPIController extends Controller
     }
     public function join(Request $request)
     {
-        $eventJoin['user_id']= $request->user_id;
-        $eventJoin['event_id']= $request->event_id;
-        $event = EventJoin::create($eventJoin);
-        return RESTAPIHelper::response(['event' => $event], 200, 'Event Fetch successfully.', $this->isBlocked);
+        $userId = $request->user_id;
+        $eventId = $request->event_id;
+// Check if the user has already joined the event
+        if (EventJoin::where('user_id', $userId)->where('event_id', $eventId)->exists()) {
+            return RESTAPIHelper::response(['message' => 'User already joined this event'], 400, 'User already joined this event.', $this->isBlocked);
+        }
+// If the user has not joined the event yet, create a new record
+        $eventJoin = new EventJoin;
+        $eventJoin->user_id = $userId;
+        $eventJoin->event_id = $eventId;
+        $eventJoin->save();
+        return RESTAPIHelper::response(['event' => $eventJoin], 200, 'Event Fetch successfully.', $this->isBlocked);
     }
 
     public function eventUser($id, Request $request, Event $event)
