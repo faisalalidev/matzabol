@@ -46,6 +46,9 @@ Route::get('get-dropdowns', 'Api\DropdownController@getDropdowns');
 
 Route::group(['middleware' => ['jwt.customAuth']], function () {
     Route::post('update-profile/{id}', 'Api\UserController@updateProfile');
+    Route::post('events/join', 'Api\EventAPIController@join');
+    Route::get('events-user/{id}', 'Api\EventAPIController@eventUser');
+    Route::post('events-user-joined', 'Api\EventAPIController@eventUserJoined');
 });
 
 /*****************************JWT middleware Auths****************************************************/
@@ -90,9 +93,7 @@ Route::resource('religion', 'Api\ReligionAPIController');
 Route::resource('prompts', 'Api\PromptAPIController');
 Route::resource('user_prompts', 'Api\UserPromptAPIController');
 Route::resource('events', 'Api\EventAPIController');
-Route::post('events/join', 'Api\EventAPIController@join');
-Route::get('events-user/{id}', 'Api\EventAPIController@eventUser');
-Route::post('events-user-joined', 'Api\EventAPIController@eventUserJoined');
+
 
 
 /*Notification*/
