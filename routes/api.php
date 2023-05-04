@@ -49,6 +49,7 @@ Route::group(['middleware' => ['jwt.customAuth']], function () {
     Route::post('events/join', 'Api\EventAPIController@join');
     Route::get('events-user/{id}', 'Api\EventAPIController@eventUser');
     Route::post('events-user-joined', 'Api\EventAPIController@eventUserJoined');
+    Route::post('update-user-image', 'Api\UserController@updateImage');
 });
 
 /*****************************JWT middleware Auths****************************************************/
@@ -60,7 +61,7 @@ Route::get('get-profile', 'Api\UserController@getUserProfile');
 //Route::post('update-profile', 'Api\UserController@updateProfile');
 Route::post('update-aboutme', 'Api\UserController@updateProfile');
 Route::post('update-notification-settings', 'Api\UserController@updateProfile');
-Route::post('update-user-image', 'Api\UserController@updateImage');
+
 Route::get('get-user-images', 'Api\UserController@getUserImages');
 Route::post('search-profiles', 'Api\UserController@getSearchProfiles');
 Route::post('user/update-password', 'Api\UserController@updatePassword');

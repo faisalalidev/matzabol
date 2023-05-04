@@ -124,6 +124,11 @@ class UserController extends ApiBaseController
             if ($request->hasFile('profile_image')) {
                 $filename = $request->profile_image->store('users');
                 $params['profile_image'] = $filename;
+                UserImage::create([
+                    'user_id'    => $request->id,
+                    'image'      => $filename,
+                    'sort_order' => '1'
+                ]);
             }
             $res = $this->user->update($params, $request->id);
             if ($request->device_token && $request->device_type) {
