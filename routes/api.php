@@ -79,6 +79,7 @@ Route::get('get-user-thread-id', 'Api\UserController@getChatThreadIdAndUser');
 Route::post('un-match-user', 'Api\UserController@unMatchUserByThreadID');
 Route::post('un-match', 'Api\UserController@UnMatched');
 Route::post('conversation', 'Api\UserController@addConversation');
+Route::post('create-video-call', 'Api\UserController@createVideoCall');
 Route::get('conversation/{id}', 'Api\UserController@getConversation');
 /*ContactUs Routes*/
 Route::post('contact-us', 'Api\ContactusController@store');

@@ -359,9 +359,7 @@ class UserController extends ApiBaseController
     /*like , dislike and boost api function*/
     public function userProfileActivity(ProfileActivityRequest $request)
     {
-
         $res['match'] = false;
-
         try {
             $postData = $request->all();
 
@@ -1081,5 +1079,35 @@ class UserController extends ApiBaseController
         return RESTAPIHelper::response($conversation, 200, 'Conversation Fetch');
     }
 
+    public function createVideoCall(Request $request)
+    {
+        $twilioAccountSid = getenv("TWILIO_SID");
+        $auth_token = getenv("TWILIO_TOKEN");
+        $fetchRoom = \Illuminate\Support\Facades\DB::table('user_room')->where('user_id', $request->user_id)->first();
+        $client = new Twilio\Rest\Client($twilioAccountSid, $auth_token);
+        if ($fetchRoom == null) {
+            $room = $client->video->rooms->create([
+                'uniqueName' => $request->user_id,
+                'type' => 'peer-to-peer',
+                'recordParticipantsOnConnect' => false,
+                'statusCallback' => 'http://example.com/status',
+                'statusCallbackMethod' => 'POST',
+                'statusCallbackEvent' => ['room-created', 'room-ended', 'participant-connected', 'participant-disconnected']
+            ]);
+
+            \Illuminate\Support\Facades\DB::table('user_room')->insert([
+                'user_id' => $request->user_id,
+                'sid' => $room->sid,
+            ]);
+        }
+        else{
+            $room = $client->video->rooms($fetchRoom->sid)->fetch();
+        }
+        $data = [
+            'sid'=> $room->sid,
+            'uniqueName'=> $room->uniqueName
+        ];
+        return RESTAPIHelper::response($data, 200, 'Room Fetch');
+    }
 
 }
