@@ -1099,6 +1099,11 @@ class UserController extends ApiBaseController
                 'user_id' => $request->user_id,
                 'sid' => $room->sid,
             ]);
+            $data = [
+                'sid'=> $room->sid,
+                'uniqueName'=> $room->uniqueName
+            ];
+            return RESTAPIHelper::response($data, 200, 'Room Fetch');
         }
         else{
             $room = $client->video->rooms($fetchRoom->sid)->fetch();

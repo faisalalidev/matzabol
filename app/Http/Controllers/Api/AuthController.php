@@ -225,11 +225,11 @@ class AuthController extends ApiBaseController
                         );
                         $client = new Client($twilioAccountSid, $auth_token);
 //                        Delete each room
-//                        $rooms = $client->video->rooms->read();
-//                        foreach ($rooms as $room) {
-//                            $client->video->rooms($room->sid)->delete();
-//                            echo "Deleted Room SID: {$room->sid}\n";
-//                        }
+                        $rooms = $client->video->rooms->read();
+                        foreach ($rooms as $room) {
+                            $client->video->rooms($room->sid)->delete();
+                            echo "Deleted Room SID: {$room->sid}\n";
+                        }
                         $fetchRoom = $client->video->rooms->read(["uniqueName" => $postData['user_id']], 20);
                         if (count($fetchRoom) == 0) {
                             $fetchRoom = $client->video->rooms->create([
