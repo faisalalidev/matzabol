@@ -151,8 +151,8 @@ class AuthController extends ApiBaseController
                         $Twiliotoken->addGrant($chatGrant);
                         //TWILIO Video TOKEN
                         $videoGrant = new Twilio\Jwt\Grants\VideoGrant();
-                        $roomName =  $postData['user_id'];
-                        $videoGrant->setRoom($roomName);
+//                        $roomName =  $postData['user_id'];
+//                        $videoGrant->setRoom($roomName);
                         $Twiliotoken->addGrant($videoGrant);
                         //TWILIO Voice TOKEN
                         $voiceGrant = new Twilio\Jwt\Grants\VoiceGrant();
@@ -385,8 +385,6 @@ class AuthController extends ApiBaseController
             $error_message = "Your email address was not found.";
             return RESTAPIHelper::response([], 404, $error_message);
         }
-
-
         $code = rand(1111, 9999);
 
         $subject = "Forgot Password Verfication Code";

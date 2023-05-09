@@ -1087,7 +1087,7 @@ class UserController extends ApiBaseController
         $client = new Twilio\Rest\Client($twilioAccountSid, $auth_token);
         if ($fetchRoom == null) {
             $room = $client->video->rooms->create([
-                'uniqueName' => $request->user_id,
+                'uniqueName' => $request->user_id. '-'. rand(1111, 9999),
                 'type' => 'peer-to-peer',
                 'recordParticipantsOnConnect' => false,
                 'statusCallback' => 'http://example.com/status',
