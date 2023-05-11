@@ -1180,8 +1180,8 @@ class UserController extends ApiBaseController
 //
 
         $call = $client->calls->create(
-            'client:1096', // Twilio phone number to make the call from
-            '+16469561987', // Identity of the user to call
+            'client:'.$request->to.'', // Twilio phone number to make the call from
+           'client:'.$request->from.'', // Identity of the user to call
             array(
                 'url' => 'http://demo.twilio.com/docs/voice.xml'
             )
