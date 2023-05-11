@@ -31,6 +31,7 @@ class EventAPIController extends Controller
                 'user_id'=> Auth::id()
             ])->first();
             $item->joined = $user ? 1 : 0; // add the joined key to the $item object
+            $item->total_join = EventJoin::where('event_id', $item->id)->count();
             array_push($events, $item); // push the modified $item into the $events array
         }
         return RESTAPIHelper::response(['event' => $events], 200, 'Event Fetch successfully.', $this->isBlocked);
