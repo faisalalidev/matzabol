@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Repositories\EventRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class EventAPIController extends Controller
 {
@@ -22,8 +23,17 @@ class EventAPIController extends Controller
 
     public function index(Request $request)
     {
-       return RESTAPIHelper::response(['event' => $this->eventRepo->getDataTable()], 200, 'Event Fetch successfully.', $this->isBlocked);
-
+        $event = $this->eventRepo->getDataTable();
+        $events = []; // create a new array to store modified events
+        foreach ($event as $item) {
+            $user = EventJoin::where([
+                'event_id'=> $item->id,
+                'user_id'=> Auth::id()
+            ])->first();
+            $item->joined = $user ? 1 : 0; // add the joined key to the $item object
+            array_push($events, $item); // push the modified $item into the $events array
+        }
+        return RESTAPIHelper::response(['event' => $events], 200, 'Event Fetch successfully.', $this->isBlocked);
     }
 
     public function show($id)

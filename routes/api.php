@@ -50,6 +50,7 @@ Route::group(['middleware' => ['jwt.customAuth']], function () {
     Route::get('events-user/{id}', 'Api\EventAPIController@eventUser');
     Route::post('events-user-joined', 'Api\EventAPIController@eventUserJoined');
     Route::post('update-user-image', 'Api\UserController@updateImage');
+    Route::resource('events', 'Api\EventAPIController');
 });
 
 /*****************************JWT middleware Auths****************************************************/
@@ -94,7 +95,7 @@ Route::resource('interests', 'Api\InterestAPIController');
 Route::resource('religion', 'Api\ReligionAPIController');
 Route::resource('prompts', 'Api\PromptAPIController');
 Route::resource('user_prompts', 'Api\UserPromptAPIController');
-Route::resource('events', 'Api\EventAPIController');
+
 
 
 
