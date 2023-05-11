@@ -1178,6 +1178,17 @@ class UserController extends ApiBaseController
         $clientToken->allowClientIncoming('1096');
         $token = $clientToken->generateToken();
 //
+
+        $call = $client->calls->create(
+            'client:1096', // Twilio phone number to make the call from
+            '+16469561987', // Identity of the user to call
+            array(
+                'url' => 'http://demo.twilio.com/docs/voice.xml'
+            )
+        );
+
+        echo $call->sid;
+
         dd($token);
 //        $response = new Twilio\TwiML\VoiceResponse();
 //        $response->say('Hello! Thanks for calling.');
