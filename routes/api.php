@@ -81,6 +81,7 @@ Route::post('un-match-user', 'Api\UserController@unMatchUserByThreadID');
 Route::post('un-match', 'Api\UserController@UnMatched');
 Route::post('conversation', 'Api\UserController@addConversation');
 Route::post('create-video-call', 'Api\UserController@createVideoCall');
+Route::post('create-voice-call', 'Api\UserController@createVoiceCall');
 Route::get('conversation/{id}', 'Api\UserController@getConversation');
 /*ContactUs Routes*/
 Route::post('contact-us', 'Api\ContactusController@store');
