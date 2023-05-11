@@ -20,6 +20,8 @@ class Event extends Model
         'description',
         'image',
         'type',
+        'address_latitude',
+        'address_longitude',
     ];
 
 

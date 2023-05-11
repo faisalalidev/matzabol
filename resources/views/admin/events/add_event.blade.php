@@ -74,6 +74,15 @@
                                         <p class="help-block">{{ $errors->first('type') }}</p>
                                     @endif
                                 </div>
+                                <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
+                                        <label for="address_address">Address</label>
+                                        <input type="text" id="address-input" name="address_address" class="form-control map-input">
+                                        <input type="hidden" name="address_latitude" id="address-latitude" value="0" />
+                                        <input type="hidden" name="address_longitude" id="address-longitude" value="0" />
+                                    <div id="address-map-container" style="width:100%;height:400px; ">
+                                        <div style="width: 100%; height: 100%" id="address-map"></div>
+                                    </div>
+                                </div>
 
 
                                 <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
