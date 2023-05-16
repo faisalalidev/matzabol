@@ -1122,43 +1122,9 @@ class UserController extends ApiBaseController
 
     public function createVoiceCall(Request $request)
     {
-
-        // Your Twilio account SID and auth token
-        $accountSid = getenv("TWILIO_SID");
-        $authToken = getenv("TWILIO_TOKEN");
-// Create a new Twilio client
-        $client = new Twilio\Rest\Client($accountSid, $authToken);
-// Generate the TwiML for the incoming call
         $response = new VoiceResponse();
-        $response->say('Hello, this is a test call.');
-        $twiml = $response->asXml();
-
-//
-
-        $call = $client->calls->create(
-            'client:'.$request->to.'', // Twilio phone number to make the call from
-            'client:'.$request->from.'', // Identity of the user to call
-            array(
-                'url' => 'http://demo.twilio.com/docs/voice.xml'
-            )
-        );
-
-        return response($call)->header('Content-Type', 'text/xml');
-
-      
-//        $response = new Twilio\TwiML\VoiceResponse();
-//        $response->say('Hello! Thanks for calling.');
-//        $response->hangup();
-//        return response($response)->header('Content-Type', 'text/xml');
-
-        // Handle the incoming call
-        $caller = $request->input('From');
-        $callee = $request->input('To');
-        // Perform any necessary logic, such as validating the caller or initiating the call
-        $response = new \Twilio\TwiML\VoiceResponse();
-        $response->dial(['callerId' => $callee])->number($caller);
-
-        return response($response)->header('Content-Type', 'text/xml');
+        $response->say('Hello World TAAAJUUU');
+        echo $response;
     }
 
 }
