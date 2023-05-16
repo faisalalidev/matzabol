@@ -145,11 +145,11 @@ class UserController extends ApiBaseController
                 try {
                     $userInterest =  UserInterest::where('user_id',$request->id)->get();
                     $interest = explode(',', $request->interest);
-                        foreach ($interest as $row) {
-                            $data['user_id'] = $request->id;
-                            $data['interest_id'] = $row;
-                            UserInterest::updateOrCreate($data);
-                        }
+                    foreach ($interest as $row) {
+                        $data['user_id'] = $request->id;
+                        $data['interest_id'] = $row;
+                        UserInterest::updateOrCreate($data);
+                    }
                 } catch (Exception $exception) {
                     $data['user_id'] = $request->id;
                     $data['interest_id'] = $request->interest;
@@ -271,7 +271,7 @@ class UserController extends ApiBaseController
                          if ($res) $is_rewind = '0';
                      }
                  }*/
-                
+
                 $params['user'] = $userData;
                 $params['user_preference'] = $this->searchPreferences->find($userData->id, ['*'], 'user_id');
 
@@ -279,7 +279,7 @@ class UserController extends ApiBaseController
                 {
                     $this->pendingRequests($request->pending_requests);
                 }
-                
+
                 $res = $this->user->getSearchProfiles($params);
                 if ($res) {
                     $this->getUserBlockedStatus($request->user_id);
@@ -546,10 +546,10 @@ class UserController extends ApiBaseController
     {
         $res = array();
 
-    if(is_null($this->user->find($request->user_id))){
-        return RESTAPIHelper::response([], 404, 'User Not found', $this->isBlocked);
-    }
-    if ($request->by_location == '1' && $request->by_country == '1') {
+        if(is_null($this->user->find($request->user_id))){
+            return RESTAPIHelper::response([], 404, 'User Not found', $this->isBlocked);
+        }
+        if ($request->by_location == '1' && $request->by_country == '1') {
             return RESTAPIHelper::response([], 404, 'Country and location cannot be select at a time', $this->isBlocked);
         }
 
@@ -1181,7 +1181,7 @@ class UserController extends ApiBaseController
 
         $call = $client->calls->create(
             'client:'.$request->to.'', // Twilio phone number to make the call from
-           'client:'.$request->from.'', // Identity of the user to call
+            'client:'.$request->from.'', // Identity of the user to call
             array(
                 'url' => 'http://demo.twilio.com/docs/voice.xml'
             )
