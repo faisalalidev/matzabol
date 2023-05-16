@@ -81,7 +81,27 @@ Route::post('un-match-user', 'Api\UserController@unMatchUserByThreadID');
 Route::post('un-match', 'Api\UserController@UnMatched');
 Route::post('conversation', 'Api\UserController@addConversation');
 Route::post('create-video-call', 'Api\UserController@createVideoCall');
-Route::post('incoming-call', 'Api\UserController@createVoiceCall');
+Route::post('/incoming-call', function (\Illuminate\Http\Request $request) {
+    $caller = $request->input('From');
+    $callee = $request->input('To');
+    // Perform any necessary logic, such as validating the caller or initiating the call
+
+    $response = new \Twilio\TwiML\VoiceResponse();
+    $dial = $response->dial();
+    $dial->number($callee);
+
+    return response($response)->header('Content-Type', 'text/xml');
+});
+
+Route::post('/status-callback', function (\Illuminate\Http\Request $request) {
+    $callSid = $request->input('CallSid');
+    $callStatus = $request->input('CallStatus');
+
+    // Perform any necessary actions based on the call status
+
+    return response()->json(['status' => 'success']);
+});
+
 Route::get('conversation/{id}', 'Api\UserController@getConversation');
 /*ContactUs Routes*/
 Route::post('contact-us', 'Api\ContactusController@store');
