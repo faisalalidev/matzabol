@@ -83,6 +83,12 @@ Route::post('conversation', 'Api\UserController@addConversation');
 Route::post('create-video-call', 'Api\UserController@createVideoCall');
 Route::post('/incoming-call', function (\Illuminate\Http\Request $request) {
     // Perform any necessary logic, such as validating the caller or initiating the call
+//  Working Code
+//    $response = new \Twilio\TwiML\VoiceResponse();
+//    $dial = $response->dial();
+//    $dial->client('1096');
+//    return $response;
+//    EndCODE
     $response = new \Twilio\TwiML\VoiceResponse();
     $dial = $response->dial();
     $dial->client('1096');
