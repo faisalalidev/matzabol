@@ -88,7 +88,6 @@ Route::post('/incoming-call', function (\Illuminate\Http\Request $request) {
     $response = new \Twilio\TwiML\VoiceResponse();
     $dial = $response->dial();
     $dial->client('1096');
-    $response->header('Content-Type', 'text/xml');
     return $response;
 });
 
