@@ -82,12 +82,12 @@ Route::post('un-match', 'Api\UserController@UnMatched');
 Route::post('conversation', 'Api\UserController@addConversation');
 Route::post('create-video-call', 'Api\UserController@createVideoCall');
 Route::post('/incoming-call', function (\Illuminate\Http\Request $request) {
-    $data = [
-        'from' => $request->from,
-        'to' => $request->to,
-        'request' => json_encode($request->all())
-    ];
-    \Illuminate\Support\Facades\DB::table('test_call')->insert($data);
+//    $data = [
+//        'from' => $request->from,
+//        'to' => $request->to,
+//        'request' => json_encode($request->all())
+//    ];
+//    \Illuminate\Support\Facades\DB::table('test_call')->insert($data);
     // Perform any necessary logic, such as validating the caller or initiating the call
 //  Working Code
 //    $response = new \Twilio\TwiML\VoiceResponse();
