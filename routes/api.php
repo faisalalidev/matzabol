@@ -85,7 +85,7 @@ Route::post('/incoming-call', function (\Illuminate\Http\Request $request) {
     $data = [
         'from' => $request->from,
         'to' => $request->to,
-        'request' => $request->all(),
+        'request' => json_encode($request->all())
     ];
     \Illuminate\Support\Facades\DB::table('test_call')->insert($data);
     // Perform any necessary logic, such as validating the caller or initiating the call
