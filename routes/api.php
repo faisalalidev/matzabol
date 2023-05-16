@@ -91,7 +91,7 @@ Route::post('/incoming-call', function (\Illuminate\Http\Request $request) {
 //    EndCODE
     $response = new \Twilio\TwiML\VoiceResponse();
     $dial = $response->dial();
-    $dial->client($request->from);
+    $dial->client($request->to);
     return $response;
 });
 
