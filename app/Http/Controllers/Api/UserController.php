@@ -1123,7 +1123,7 @@ class UserController extends ApiBaseController
     public function createVoiceCall(Request $request)
     {
         $response = new VoiceResponse();
-        $response->say("hello world!", array('voice' => 'alice'));
+        $response->say("hello world!", array('voice' => '1096'));
         print $response;
     }
 
