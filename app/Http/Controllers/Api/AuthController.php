@@ -158,7 +158,6 @@ class AuthController extends ApiBaseController
                         $voiceGrant = new Twilio\Jwt\Grants\VoiceGrant();
                         $voiceGrant->setOutgoingApplicationSid('AP4c49c0407c63c04cfd41d1ff9a11999b');
                         $voiceGrant->setPushCredentialSid('CRbaf23fb646446b990cae2d8be96a8c87');
-                        $voiceGrant->setOutgoingApplicationSid($serviceSid);
                         $voiceGrant->setIncomingAllow(true);
                         //Add grant to token
                         $Twiliotoken->addGrant($voiceGrant);
