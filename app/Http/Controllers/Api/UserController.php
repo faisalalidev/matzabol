@@ -1122,78 +1122,14 @@ class UserController extends ApiBaseController
 
     public function createVoiceCall(Request $request)
     {
+        // Handle the incoming call
+        $caller = $request->input('From');
+        $callee = $request->input('To');
+        // Perform any necessary logic, such as validating the caller or initiating the call
+        $response = new \Twilio\TwiML\VoiceResponse();
+        $response->dial(['callerId' => $callee])->number($caller);
 
-        // Your Twilio account SID and auth token
-        $accountSid = getenv("TWILIO_SID");
-        $authToken = getenv("TWILIO_TOKEN");
-// Create a new Twilio client
-        $client = new Twilio\Rest\Client($accountSid, $authToken);
-
-        $twilioApiKey= 'SKc877965934a3484debe1a49e3b73b38c';
-        $twilioApiSecret = 'I9EmGYyvROEi7R7f1Ra6bzhyUkSxofZy';
-
-// Generate a Twilio access token with a Voice grant
-        $accessToken = new AccessToken(
-            $accountSid,
-            $twilioApiKey,
-            $twilioApiSecret,
-            3600
-        );
-        $voiceGrant = new VoiceGrant();
-        $voiceGrant->setOutgoingApplicationSid('AP4c49c0407c63c04cfd41d1ff9a11999b');
-        $accessToken->addGrant($voiceGrant);
-// Generate the TwiML for the incoming call
-        $response = new VoiceResponse();
-        $response->say('Hello, this is a test call.');
-        $twiml = $response->asXml();
-
-
-// Send the TwiML notification to the iOS device using Twilio Notify API
-        $notification = $client->notify->services('ISb401765f5ee12fc3b6fc3a2046180e79')
-            ->notifications->create([
-                'body' => 'Incoming call',
-                'apn' => [
-                    'aps' => [
-                        'alert' => [
-                            'title' => 'Incoming call',
-                            'body' => 'Incoming call',
-                        ],
-                        'sound' => 'default',
-                        'mutable-content' => 1,
-                        'category' => 'incoming_call',
-                    ],
-                    'payload' => [
-                        'twiML' => $twiml,
-                    ],
-                ],
-                'identity' => '1096',
-            ]);
-
-        echo  $notification;
-
-        $twilioAccountSid = getenv("TWILIO_SID");
-        $auth_token = getenv("TWILIO_TOKEN");
-        $clientToken = new Twilio\Jwt\ClientToken($twilioAccountSid, $auth_token);
-        $clientToken->allowClientOutgoing('AP4c49c0407c63c04cfd41d1ff9a11999b');
-        $clientToken->allowClientIncoming('1096');
-        $token = $clientToken->generateToken();
-//
-
-        $call = $client->calls->create(
-            'client:'.$request->to.'', // Twilio phone number to make the call from
-            'client:'.$request->from.'', // Identity of the user to call
-            array(
-                'url' => 'http://demo.twilio.com/docs/voice.xml'
-            )
-        );
-
-        echo $call->sid;
-
-        dd($token);
-//        $response = new Twilio\TwiML\VoiceResponse();
-//        $response->say('Hello! Thanks for calling.');
-//        $response->hangup();
-//        return response($response)->header('Content-Type', 'text/xml');
+        return response($response)->header('Content-Type', 'text/xml');
     }
 
 }
