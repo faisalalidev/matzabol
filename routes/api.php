@@ -85,8 +85,7 @@ Route::post('/incoming-call', function (\Illuminate\Http\Request $request) {
     // Perform any necessary logic, such as validating the caller or initiating the call
     $response = new \Twilio\TwiML\VoiceResponse();
     $dial = $response->dial();
-    $dial->client('1096');
-    $response->header('Content-Type', 'text/xml');
+    $dial->client('1098');
     return $response;
 });
 
