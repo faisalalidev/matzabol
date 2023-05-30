@@ -95,6 +95,7 @@ Route::post('/incoming-call', function (\Illuminate\Http\Request $request) {
 //    $dial->client('1096');
 //    return $response;
 //    EndCODE
+//    $response->dial()->client('1096');
     $response = new \Twilio\TwiML\VoiceResponse();
     $dial = $response->dial();
     $dial->client('1096');

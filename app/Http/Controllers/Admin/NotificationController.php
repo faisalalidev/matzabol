@@ -112,6 +112,10 @@ class NotificationController extends Controller
 
     }
 
+    public function sendNotification()
+    {
+
+    }
     public function getUsersByType($type)
     {
         $user = $this->users->getUserByDevice($type);

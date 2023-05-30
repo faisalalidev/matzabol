@@ -145,11 +145,11 @@ class UserController extends ApiBaseController
                 try {
                     $userInterest =  UserInterest::where('user_id',$request->id)->get();
                     $interest = explode(',', $request->interest);
-                    foreach ($interest as $row) {
-                        $data['user_id'] = $request->id;
-                        $data['interest_id'] = $row;
-                        UserInterest::updateOrCreate($data);
-                    }
+                        foreach ($interest as $row) {
+                            $data['user_id'] = $request->id;
+                            $data['interest_id'] = $row;
+                            UserInterest::updateOrCreate($data);
+                        }
                 } catch (Exception $exception) {
                     $data['user_id'] = $request->id;
                     $data['interest_id'] = $request->interest;
@@ -546,10 +546,10 @@ class UserController extends ApiBaseController
     {
         $res = array();
 
-        if(is_null($this->user->find($request->user_id))){
-            return RESTAPIHelper::response([], 404, 'User Not found', $this->isBlocked);
-        }
-        if ($request->by_location == '1' && $request->by_country == '1') {
+    if(is_null($this->user->find($request->user_id))){
+        return RESTAPIHelper::response([], 404, 'User Not found', $this->isBlocked);
+    }
+    if ($request->by_location == '1' && $request->by_country == '1') {
             return RESTAPIHelper::response([], 404, 'Country and location cannot be select at a time', $this->isBlocked);
         }
 
@@ -1119,12 +1119,5 @@ class UserController extends ApiBaseController
         return RESTAPIHelper::response($data, 200, 'Room Fetch');
     }
 
-
-    public function createVoiceCall(Request $request)
-    {
-        $response = new VoiceResponse();
-        $response->say("hello world!", array('voice' => '1096'));
-        print $response;
-    }
 
 }

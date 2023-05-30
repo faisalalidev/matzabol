@@ -34,6 +34,5 @@ class SendPushNotification implements ShouldQueue
     public function handle()
     {
         Helper\sendPushNotifications($this->msg,$this->deviceTokens,$this->extraPayLoadData);
-
     }
 }

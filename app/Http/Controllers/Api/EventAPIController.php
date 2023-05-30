@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\RESTAPIHelper;
+use App\Jobs\SendPushNotificationJob;
 use App\Models\Event;
 use App\Models\EventJoin;
 use App\Models\EventUserMatch;
 use App\Models\User;
+use App\Models\UserDevice;
 use App\Repositories\EventRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class EventAPIController extends Controller
 {
@@ -93,6 +96,13 @@ class EventAPIController extends Controller
             }
             $matchedUser = $possibleMatches->random();
             // Create the match record
+            if($matchedUser){
+                $title = 'New Match';
+                $body= 'Click to match';
+                SendPushNotificationJob::dispatch($matchedUser->id, $title, $body)->onQueue('push-notifications');
+
+            }
+//            SendPushNotificationJob::dispatch($request->user_id, $title, $body)->onQueue('push-notifications');
             $match = new EventUserMatch();
             $match->event_id = $event->id;
             $match->user_id = $request->user_id;
@@ -105,13 +115,9 @@ class EventAPIController extends Controller
             ],
                 200, 'Matched with user successfully.', $this->isBlocked);
         }
-
         return RESTAPIHelper::response(['event' => $event], 200, 'Event fetch successfully.', $this->isBlocked);
-
     }
 
-    public function eventUserJoined(Request $request)
-    {
-        dd('ss');
-    }
+
+
 }

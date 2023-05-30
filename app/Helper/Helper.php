@@ -9,7 +9,6 @@ use Mockery\Exception;
 function sendPushNotifications($msg = 'Veil', $deviceObject = [], $extraPayLoadData = [], $badge = 0)
 {
     try {
-
         $deviceTokenAndroid = [];
         $deviceTokenIphone = [];
 
@@ -28,9 +27,7 @@ function sendPushNotifications($msg = 'Veil', $deviceObject = [], $extraPayLoadD
                     ->send();
             } else {
                 //$deviceTokenIphone[] = $device['device_token'];
-
                 $push = new PushNotification('apn');
-
                 if ($extraPayLoadData['action_type'] == "general") {
                     $push->setMessage([
                         'aps'          => [
@@ -39,7 +36,7 @@ function sendPushNotifications($msg = 'Veil', $deviceObject = [], $extraPayLoadD
                                 'body'  => $msg,
                             ],
                             'sound' => 'default',
-                            'badge' => $device['badge_count']
+                            'badge' => 0
                         ],
                         'extraPayLoad' => [
                             'action_type'    => $extraPayLoadData['action_type'],
@@ -63,7 +60,7 @@ function sendPushNotifications($msg = 'Veil', $deviceObject = [], $extraPayLoadD
                                 'body'  => $msg,
                             ],
                             'sound' => 'default',
-                            'badge' => $device['badge_count'],
+                            'badge' => 0,
                         ],
                         'extraPayLoad' => [
                             'action_type' => $extraPayLoadData['action_type'],
