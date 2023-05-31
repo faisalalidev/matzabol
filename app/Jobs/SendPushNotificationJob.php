@@ -27,6 +27,7 @@ class SendPushNotificationJob implements ShouldQueue
      */
 
     protected $userId;
+    protected $matchedID;
     protected $title;
     protected $body;
 
@@ -39,9 +40,10 @@ class SendPushNotificationJob implements ShouldQueue
      * @return void
      */
 
-    public function __construct($userId, $title, $body)
+    public function __construct($userId, $title, $body,$matchedID)
     {
         $this->userId = $userId;
+        $this->matchedID = $matchedID;
         $this->title = $title;
         $this->body = $body;
     }
@@ -54,14 +56,20 @@ class SendPushNotificationJob implements ShouldQueue
     public function handle()
     {
         $SERVER_API_KEY = getenv('SERVER_KEY');
-        $firebaseToken = UserDevice::where('user_id', $this->userId)->whereNotNull('device_token')->pluck('device_token')->all();
-        Log::error($firebaseToken);
+        $firebaseToken = UserDevice::where('user_id', $this->matchedID)->whereNotNull('device_token')->pluck('device_token')->all();
+        $user = User::where('id', $this->userId)->first();
+        Log::error($user);
         if (!$firebaseToken) {
             Log::error('User does not have a device token');
             return;
         }
         $data = [
             "registration_ids" => $firebaseToken,
+            "data" => [
+                "id" => $this->userId,
+                "full_name" => $user->full_name,
+                "profile_image" => $user->profile_image,
+            ],
             "notification" => [
                 "title" => $this->title,
                 "body" => $this->body,
@@ -80,7 +88,6 @@ class SendPushNotificationJob implements ShouldQueue
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
         $response = curl_exec($ch);
-        Log::error($response);
         if ($response) {
             return 'success';
         } else {
