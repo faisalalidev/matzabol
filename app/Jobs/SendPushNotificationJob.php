@@ -55,6 +55,7 @@ class SendPushNotificationJob implements ShouldQueue
     {
         $SERVER_API_KEY = getenv('SERVER_KEY');
         $firebaseToken = UserDevice::where('user_id', $this->userId)->whereNotNull('device_token')->pluck('device_token')->all();
+        Log::error($firebaseToken);
         if (!$firebaseToken) {
             Log::error('User does not have a device token');
             return;
@@ -79,6 +80,7 @@ class SendPushNotificationJob implements ShouldQueue
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
         $response = curl_exec($ch);
+        Log::error($response);
         if ($response) {
             return 'success';
         } else {
