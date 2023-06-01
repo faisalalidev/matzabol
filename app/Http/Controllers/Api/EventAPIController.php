@@ -106,7 +106,7 @@ class EventAPIController extends Controller
             $match->event_id = $event->id;
             $match->user_id = $request->user_id;
             $match->matched_id = $matchedUser->id;
-            $match->save();
+            //$match->save();
             $match->load(['user', 'matchedUser']);
             return RESTAPIHelper::response([
 //                'user' => $match->user,
