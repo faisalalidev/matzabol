@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\InterestCreateRequest;
+use App\Models\UserImage;
 use App\Repositories\EventRepository;
 use App\Repositories\InterestRepository;
 use Illuminate\Http\Request;
@@ -17,9 +18,13 @@ class EventController extends Controller
         $this->eventRepository = $event;
     }
 
-    public function store(InterestCreateRequest $request)
+    public function store(Request $request)
     {
         $postData = $request->all();
+        if ($request->hasFile('image')) {
+            $filename = $request->image->store('events');
+            $postData['image'] = $filename;
+        }
         $this->eventRepository->setData($postData);
         Alert::success('Succesfully Created!');
         return redirect('admin/events');
