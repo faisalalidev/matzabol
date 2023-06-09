@@ -25,6 +25,7 @@ class EventController extends Controller
             $filename = $request->image->store('events');
             $postData['image'] = $filename;
         }
+        $postData['location'] = $request->address_address;
         $this->eventRepository->setData($postData);
         Alert::success('Succesfully Created!');
         return redirect('admin/events');
