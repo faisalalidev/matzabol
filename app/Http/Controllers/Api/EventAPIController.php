@@ -98,7 +98,7 @@ class EventAPIController extends Controller
             // Create the match record
             if($matchedUser){
                 $title = 'New Match';
-                $body= 'Click to match';
+                $body= 'Click to join call';
                 SendPushNotificationJob::dispatch($request->user_id, $title, $body,$matchedUser->id )->onQueue('push-notifications');
             }
 //            SendPushNotificationJob::dispatch($request->user_id, $title, $body)->onQueue('push-notifications');

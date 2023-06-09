@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Event extends Model
 {
@@ -24,6 +25,9 @@ class Event extends Model
         'address_longitude',
     ];
 
+    protected $appends = [
+        'image_url'
+    ];
 
     public function usersInfo()
     {
@@ -39,5 +43,10 @@ class Event extends Model
     {
         return $this->belongsToMany(User::class, 'event_users')
             ->withTimestamps();
+    }
+    public function getImageUrlAttribute()
+    {
+        $url = asset(Storage::url('app/' . $this->image));
+        return $url;
     }
 }
